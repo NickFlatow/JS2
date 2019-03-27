@@ -26,7 +26,7 @@ Vue.component('day', {
         '           <h1>{{name}}</h1>\n' +
         '            <div class = "row">\n' +
         '            </div>' +
-        '            <h1>{{medMins}}</h1>'+
+        '            <h1>{{(medMins)}}</h1>'+
         '            <h1 v-if="steps.dataset[0].point[0]">{{steps.dataset[0].point[0].value[0].intVal}}</h1>'+
         '            <h1 v-else>0</h1> '+
         // '            <h1>{{steps}}</h1>'+

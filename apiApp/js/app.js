@@ -5,7 +5,8 @@ var app = new Vue({
     data: {
         weeklySession: new Session(),
         stepsBucket: new Session(),
-        message:'Hello'
+        message:'Hello',
+        loggedIn: false
     },
 
     methods:{
@@ -19,6 +20,7 @@ var app = new Vue({
                     scope: 'https://www.googleapis.com/auth/fitness.activity.read',
                     response_type: 'id_token permission'
                 }, function (response) {
+                    // console.log(response);
                     if (response.error) {
                         // An error happened!
                         alert('Token Error!');
@@ -27,11 +29,14 @@ var app = new Vue({
                     //save token to local storage
                     localStorage.setItem('token', response.access_token);
 
-
                 });
             }
+            this.toggle();
             this.getData();
             this.getStepsBucket();
+        },
+        toggle: function(){
+          this.loggedIn = !this.loggedIn
         },
         getData(){
             var authCode = 'Bearer ' + localStorage.getItem('token');

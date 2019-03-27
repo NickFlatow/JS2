@@ -12,16 +12,22 @@
             <button type ="button" @click="handleClientLoad">Refresh Token</button>
             <button type ="button" @click="getStepsBucket">Post</button>
             <button type ="button" @click="getData">Get</button>
-
+            <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
+            {{loggedIn}}
             <b-container>
                 <b-row>
-                    <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps"></day></b-col>
-                    <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps"></day></b-col>
-                    <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps"></day></b-col>
-                    <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps"></day></b-col>
-                    <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps"></day></b-col>
-                    <!--<day name="Friday" :dayofweek="fridayList"></day>-->
-                    <!--<day name="Saturday" :dayofweek="saturdayList"></day>-->
+                    <div v-if="loggedIn">
+                        <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps"></day></b-col>
+                        <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps"></day></b-col>
+                        <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps"></day></b-col>
+                        <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps"></day></b-col>
+                        <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps"></day></b-col>
+                        <!--<day name="Friday" :dayofweek="fridayList"></day>-->
+                        <!--<day name="Saturday" :dayofweek="saturdayList"></day>-->
+                    </div>
+                    <div v-else>
+                        You must be Logged In
+                    </div>
                 </b-row>
             </b-container>
             <!--&lt;!&ndash;<list name="Favorite" :items="sunday"></list>&ndash;&gt;-->
