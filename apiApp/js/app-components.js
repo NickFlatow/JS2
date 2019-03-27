@@ -12,6 +12,11 @@ Vue.component('day', {
         steps:{
             type: Object
         }
+        // steps:{
+        //     type: Number,
+        //     default: 0
+        // }
+
     },
     methods: {
 
@@ -22,7 +27,8 @@ Vue.component('day', {
         '            <div class = "row">\n' +
         '            </div>' +
         '            <h1>{{medMins}}</h1>'+
-        '            <h1>{{steps.dataset[0].point[0].value[0].intVal}}</h1>'+
+        '            <h1 v-if="steps.dataset[0].point[0]">{{steps.dataset[0].point[0].value[0].intVal}}</h1>'+
+        '            <h1 v-else>0</h1> '+
         // '            <h1>{{steps}}</h1>'+
         '         </div>',
     computed: {

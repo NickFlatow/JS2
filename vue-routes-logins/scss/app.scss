@@ -1,0 +1,379 @@
+@import "bootstrap";
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+nav, .btn, h1, h2, h3, h4, h5, h6, #footer, .card-header {
+  text-transform: uppercase;
+  font-family: 'Signika Negative', serif;
+  letter-spacing: .05em;
+}
+
+h1, h2 {
+  color: $secondary;
+}
+
+// ----- APP / LAYOUT -----
+#app {
+  display: flex;
+  width: 100%;
+  padding-bottom: 40px;
+  min-height: 100vh;
+}
+
+#sidebar {
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: -200px;
+  min-height: 100vh;
+  padding: 15px;
+  z-index: 999;
+  background: $dark;
+  color: #fff;
+  transition: all 0.3s;
+
+  .logo {
+    margin-bottom: 15px;
+  }
+
+  li {
+    a {
+      display: block;
+      padding: 5px 0;
+    }
+  }
+
+  a.router-link-active {
+    color: $light;
+  }
+}
+
+#content {
+  flex-direction: column;
+  width: 100%;
+  transition: all 0.3s;
+
+  & > div {
+    padding: 15px;
+  }
+}
+
+#footer {
+  height: 40px;
+  margin-top: -40px;
+  padding-top: 3px;
+  text-align: center;
+  color: $primary;
+}
+
+@include media-breakpoint-up(md) {
+  #sidebar {
+    left: 0;
+  }
+  #content, #footer {
+    margin-left: 200px;
+  }
+
+
+}
+
+
+.avatar {
+  border-radius: 50%;
+  height: 30px;
+  margin-right: 5px;
+}
+
+nav {
+  border-bottom: 2px solid $light;
+
+  ul {
+    margin-top: 20px;
+  }
+
+  .navbar-brand {
+    font-size: 1.2em;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    color: $secondary;
+  }
+
+  .avatar {
+    height: 40px;
+  }
+}
+
+#nav_collapse a {
+  color: $light;
+  display: inline-block;
+  padding: .25em 0;
+}
+
+
+.page {
+  h2 {
+    border-bottom: 1px solid $dark;
+    margin-bottom: 15px;
+  }
+}
+
+.home {
+  .logo {
+    max-width: 350px;
+    margin: 10px 0 50px 0;
+  }
+
+  .card i {
+    font-size: 5em;
+    color: $secondary;
+    margin-bottom: 10px;
+  }
+
+  .card-header {
+    font-size: 1.2em;
+  }
+}
+
+
+.modal-content {
+  border-radius: 4px;
+
+  .modal-header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .md-col-divider {
+    border-right: 1px solid $primary;
+  }
+}
+
+
+
+
+
+
+
+
+.potluck {
+  a {
+    padding: 15px 0;
+
+  }
+
+  a:hover {
+    background-color: $gray-200;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  a > div:first-child {
+
+  }
+
+  .left-column {
+    padding: 0 20px;
+    border-right: 2px solid $primary;
+    flex-basis: 0;
+  }
+
+  .right-column {
+    padding: 0 20px;
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+
+  time.icon {
+    font-size: .5em;
+
+    strong {
+      font-size: 1.3em;
+      padding: 0.2em 0;
+    }
+
+    span {
+      padding-top: 0.9em;
+    }
+  }
+
+
+
+  .name {
+    margin: 0;
+  }
+
+  .description {
+    color: $body-color;
+    margin-bottom: 1em;
+  }
+
+  .details {
+    margin-top: 10px;
+    font-size: .7em;
+    color: $body-color;
+  }
+
+  .created-by {
+    color: $body-color;
+
+
+  }
+
+}
+
+
+.potluck-detail {
+  @include media-breakpoint-only(xs){
+    .right-column {
+      display: none;
+    }
+  }
+
+  .right-column {
+    padding: 0 20px;
+    flex-basis: 0;
+  }
+
+  .left-column {
+    padding: 0 20px;
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+
+
+
+  .name {
+    margin: 0;
+  }
+
+  .description {
+    color: $body-color;
+    margin-bottom: 1em;
+  }
+
+  .details {
+    font-weight: bold;
+    font-size: .9em;
+
+    i {
+      width: 1em;
+      text-align: center;
+      margin-right: 3px;
+    }
+  }
+
+  .bringing {
+    display: block;
+    margin: -5px 0 0 40px;
+    font-size: .8em;
+  }
+
+  .tabs .nav-item{
+    width: 50%;
+    text-align: center;
+  }
+
+  .needs{
+    margin-bottom: 20px;
+
+    i {
+      margin: 0 5px 0 10px;
+    }
+
+    .need {
+      margin: 2px 0;
+      display: flex;
+
+      span {
+        flex-grow: 1;
+      }
+
+      //&:last-of-type {
+      //  padding-bottom: 15px;
+      //  border-bottom: 1px solid $dark;
+      //  margin-bottom: 15px;
+      //}
+    }
+
+    .form-control {
+      height: 1.7rem;
+      flex-grow: 1;
+    }
+
+    .btn-sm {
+      height: 1.7rem;
+      margin-left: 5px;
+      padding: 0 .5rem;
+    }
+  }
+
+
+
+}
+
+
+
+
+
+/* Calendar Icon */
+/* http://cssdeck.com/labs/calendar-icon */
+time.icon{
+  font-size: 1em; /* change icon size */
+  display: block;
+  position: relative;
+  width: 7em;
+  height: 7em;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 0.6em;
+  box-shadow: 0 1px 0 #bdbdbd, 0 2px 0 #fff, 0 3px 0 #bdbdbd, 0 4px 0 #fff, 0 5px 0 #bdbdbd, 0 0 0 1px #bdbdbd;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: rotate(0deg) skewY(0deg);
+  -webkit-transform-origin: 50% 10%;
+  transform-origin: 50% 10%;
+
+  * {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    font-weight: bold;
+    font-style: normal;
+    text-align: center;
+  }
+
+  // month
+  strong {
+    position: absolute;
+    top: 0;
+    padding: 0.4em 0;
+    color: #fff;
+    background-color: $primary;
+    border-bottom: 1px dashed darken($primary, 10);
+    box-shadow: 0 2px 0 darken($primary, 10);
+  }
+
+  // day of week
+  em {
+    position: absolute;
+    bottom: 0.3em;
+    color: $primary;
+  }
+
+  // number
+  span {
+    width: 100%;
+    font-size: 2.8em;
+    letter-spacing: -0.05em;
+    padding-top: 0.7em;
+    color: $secondary;
+  }
+
+
+
+}
+

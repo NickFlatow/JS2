@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST IT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<button id="add">Add User</button>
+<button id="update">Update Profile</button>
+<button id="delete">Delete User</button>
+<hr>
+<button id="login">Login</button>
+<button id="logout">Logout</button>
+<hr>
+<div id="message"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+
+<!-- Vue Application -->
+<script src="js/app-models.js"></script>
+<script>
+    // obviously, this would come from some form or whatever
+    var email = 'me@mysite.com';
+    var password = 'secret';
+
+    // create user
+    document.getElementById('add').onclick = function(e){
+
+
+        firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                document.getElementById('message').innerHTML =  'Error: ' + errorMessage;
+            });
+    };
+
+    // login
+    document.getElementById('login').onclick = function(e){
+        let provider = new firebase.auth.GoogleAuthProvider()
+        firebase.auth()
+            // .signInWithEmailAndPassword(email, password)
+            .signInWithPopup(provider)
+            .catch(function(error) {
+                // Handle Errors here.
+                let errorCode = error.code;
+                let errorMessage = error.message;
+
+                document.getElementById('message').innerHTML =  'Error: ' + errorMessage;
+            });
+    };
+
+    // update profile
+    document.getElementById('update').onclick = function(e){
+        firebase.auth()
+            .currentUser
+            .updateProfile({
+                displayName: "Joe Schmo",
+                // ...
+            }).then(function() {
+                // Update successful.
+
+                document.getElementById('message').innerHTML =  'Account updated!';
+            }).catch(function(error) {
+                // An error happened.
+
+                document.getElementById('message').innerHTML =  'Error: ' + error.message;
+            });
+    };
+
+    // delete user
+    document.getElementById('delete').onclick = function(e){
+        firebase.auth()
+            .currentUser
+            .delete()
+            .then(function() {
+                // User deleted.
+            }).catch(function(error) {
+                // An error happened.
+            });
+    };
+
+    // logout
+    document.getElementById('logout').onclick = function(e){
+        firebase.auth().signOut();
+    };
+
+    // display logged in/out messages
+    window.onload = function(){
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+
+                console.log('Signed in as: ', user);
+
+                document.getElementById('message').innerHTML = 'Signed in as: ' + displayName + ' (' + email + ')';
+
+            } else {
+                // User is signed out.
+                console.log('Not signed in.');
+
+                document.getElementById('message').innerHTML = 'Signed out.';
+            }
+        });
+    };
+</script>
+
+</body>
+</html>

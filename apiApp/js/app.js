@@ -26,8 +26,12 @@ var app = new Vue({
                     }
                     //save token to local storage
                     localStorage.setItem('token', response.access_token);
+
+
                 });
             }
+            this.getData();
+            this.getStepsBucket();
         },
         getData(){
             var authCode = 'Bearer ' + localStorage.getItem('token');
@@ -161,7 +165,16 @@ var app = new Vue({
         },
         wednesdaySteps: function(){
             return this.stepsBucket[3];
+        },
+        thursdaySteps: function() {
+            return this.stepsBucket[4];
         }
+
+
+        // fridaySteps: function(){
+        //     return this.stepsBucket[5];
+        // }
+
 
     },
     mounted: function(){

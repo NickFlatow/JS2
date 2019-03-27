@@ -13,14 +13,17 @@
             <button type ="button" @click="getStepsBucket">Post</button>
             <button type ="button" @click="getData">Get</button>
 
-
-            <day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps"></day>
-            <day name="Monday" :dayofweek="mondayList" :steps="mondaySteps"></day>
-            <day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps"></day>
-            <day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps"></day>
-            <!--<day name="Thursday" :dayofweek="thursdayList"></day>-->
-            <!--<day name="Friday" :dayofweek="fridayList"></day>-->
-            <!--<day name="Saturday" :dayofweek="saturdayList"></day>-->
+            <b-container>
+                <b-row>
+                    <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps"></day></b-col>
+                    <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps"></day></b-col>
+                    <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps"></day></b-col>
+                    <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps"></day></b-col>
+                    <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps"></day></b-col>
+                    <!--<day name="Friday" :dayofweek="fridayList"></day>-->
+                    <!--<day name="Saturday" :dayofweek="saturdayList"></day>-->
+                </b-row>
+            </b-container>
             <!--&lt;!&ndash;<list name="Favorite" :items="sunday"></list>&ndash;&gt;-->
             <!--<h1>{{sundayList}}</h1>-->
         </div>
