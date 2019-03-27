@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta charset="UTF-8"><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" href="client.css">
+        <title>Lib</title>
+    </head>
+    <body>
+
+        <nav class="navbar fixed-top">
+            <span class="navbar-brand">Your Library</span>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#newModal" title="Add Book To Collection">
+                Add Book To Collection
+            </button>
+        </nav>
+        <div class ="jumbotron" id = "app">
+            <div class = "container">
+                <list name="Non-Fiction" :items="nonFictionList" @edit="edit" class ="test m1"></list>
+                <list name="Educational" :items="educationalList" @edit="edit" class ="m1"></list>
+                <list name="Autobiography/Biography" :items="autobiographyList" @edit="edit" class="m1"></list>
+                <list name="Favorite" :items="favoriteList" @edit="edit" class="m1"></list>
+                <!--<img src="images/libhead.jpg" class="img-fluid lib-head-img">-->
+            </div>
+            <!-- Modal -->
+            <bookmodal :book="newItem" id="newModal" header="Add Book" @savebook="add" @remove="remove"></bookmodal>
+            <bookmodal :book="editBook" id="editModal" header="Edit Book" @savebook="update" @remove="remove"></bookmodal>
+
+        <!--End of App-->
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="js/app-components.js"></script>
+        <script src ="js/app-modal.js"></script>
+        <script src="js/app.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,108 @@
+@import "bootstrap";
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+nav, .btn, h1, h2, h3, h4, h5, h6, .footer, .card-header {
+  text-transform: uppercase;
+  font-family: 'Signika Negative', serif;
+  letter-spacing: .05em;
+}
+
+// ----- APP / LAYOUT -----
+#app {
+  display: flex;
+  padding-top: 100px;
+  padding-bottom: 40px;
+  min-height: 100vh;
+}
+
+nav {
+  border-bottom: 2px solid $light;
+
+  .navbar-brand {
+    font-size: 2em;
+    margin-right: .5rem;
+    color: $secondary;
+  }
+
+  .logo {
+    height: 1.3em;
+    margin-right: 10px;
+  }
+
+}
+
+.footer {
+  height: 40px;
+  margin-top: -40px;
+  padding-top: 3px;
+  text-align: center;
+  color: $primary;
+}
+
+.recipe {
+  border-color: $primary;
+
+  .card-header {
+    font-size: 2em;
+    padding: .25rem 1rem;
+  }
+
+  .rating {
+    font-size: 1.7em;
+    padding-bottom: 10px;
+    text-align: center;
+    color: $secondary;
+
+    .fas.fa-star {
+      padding-left: 5px;
+    }
+
+    .far.fa-star {
+      padding-right: 5px;
+    }
+
+  }
+
+  .description {
+    margin-bottom: 20px;
+  }
+
+  .recipe-image {
+    width: 100%;
+    border: 2px solid $primary;
+    border-radius: 5px;
+  }
+
+  .buttons, .recipe-image {
+    margin-bottom: 20px;
+  }
+
+  .buttons i {
+    margin-right: 3px;
+  }
+
+  .bottom-divider{
+    margin-bottom: 15px;
+    border-bottom: 1px solid $primary;
+  }
+
+}
+
+.modal-content {
+  border-radius: 4px;
+
+  .modal-header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .md-col-divider {
+    border-right: 1px solid $primary;
+  }
+}
+

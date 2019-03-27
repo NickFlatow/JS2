@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src ="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<script>
+    $(document).ready(function(){
+        var SCOPE = 'https://www.googleapis.com/auth/fitness.activity.read';
+        // var accessToken;
+        // var authCode = 'Bearer ';
+
+        function handleClientLoad() {
+            // Load the API's client and auth2 modules.
+            // Call the initClient function after the modules load.
+            gapi.load('client:auth2', authClient);
+        }
+        function authClient() {
+            gapi.auth2.authorize({
+                client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
+                scope: SCOPE,
+                response_type: 'id_token permission'
+            }, function (response) {
+                if (response.error) {
+                    // An error happened!
+                    alert('Token Error!')
+                    return;
+                }
+                //save token to local storage
+                localStorage.setItem('token',response.access_token);
+            });
+        }
+        function getData(){
+            var authCode = 'Bearer ' + localStorage.getItem('token');
+            // console.log(authCode);
+            // console.log(accessToken);
+            // var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataSources";
+            //get today's date
+            var req_url = "https://www.googleapis.com/fitness/v1/users/me/sessions?startTime=2019-03-06T00:00:00.000Z&endTime=2019-03-13T23:59:59.999Z"
+            $.ajax({
+                type: "GET",
+                url: req_url,
+                beforeSend : function( xhr ) {
+                    xhr.setRequestHeader('Authorization', authCode);
+                },
+                success: function (response) {
+                    var dss = response['session'];
+                    var dsname = [];
+                    for (i = 0; i < dss.length; i++) {
+                        dsname.push(dss[i]);
+                    }
+                    var d = new Date(response.session[0].startTimeMillis);
+                    console.log(response);
+                },
+                failure: function(){
+                    //get new access token
+                }
+            });
+        }
+        function postData(){
+            var authCode = 'Bearer ' + localStorage.getItem('token');
+            // we use different device uid to distinguish different data sources of a same type.
+            var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
+            // You may need dsId.
+            // var dsId = "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps";
+            $.ajax({
+                type: "POST",
+                url: req_url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    "aggregateBy": [{
+                        "dataTypeName": "com.google.step_count.delta",
+                        "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
+                    }],
+                    "bucketByTime": { "durationMillis": 86400000 },
+                    "startTimeMillis": 1551830401000,
+                    "endTimeMillis": 1552089540000
+                }),
+
+                beforeSend : function( xhr ) {
+                    xhr.setRequestHeader('Authorization', authCode);
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                failure: function(errMsg) {
+                    //get new access token
+                    alert(errMsg);
+                }
+
+            });
+        }
+        $('#get').on('click',function(){
+            getData();
+        });
+        $('#post').on('click',function(){
+            postData();
+        });
+        $('#token').on('click',function(){
+            handleClientLoad();
+        });
+    });
+</script>
+
+
+
+
+<body>
+<button id="token">Refresh Token</button>
+<button id="post">Post</button>
+<button id="get">Get</button>
+<div id="results"></div>
+</body>
+</html>

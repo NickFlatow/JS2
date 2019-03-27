@@ -1,0 +1,35 @@
+//headspace data
+{
+  "aggregateBy": [{
+    "dataTypeName": "com.getsomeheadspace.android",
+    "dataSourceId": "raw:com.google.activity.segment:com.getsomeheadspace.android:"
+  }],
+  "bucketByTime": { "durationMillis": 86400000 },
+  "startTimeMillis": 1552197600000,
+  "endTimeMillis": 1552712400000
+}
+//steps data
+{
+  "aggregateBy": [{
+    "dataTypeName": "com.google.step_count.delta",
+    "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
+  }],
+  "bucketByTime": { "durationMillis": 86400000 },
+  "startTimeMillis": 1551830401000,
+  "endTimeMillis": 1552089540000
+}
+//calories maybe?
+{
+  "aggregateBy": [{
+    "dataTypeName": "com.google.android.gms",
+    "dataSourceId": "derived:com.google.calories.expended:com.google.android.gms:from_activities"
+  }],
+  "bucketByTime": { "durationMillis": 86400000 },
+  "startTimeMillis": 1551830401000,
+  "endTimeMillis": 1552089540000
+}
+//get session data
+
+https://www.googleapis.com/fitness/v1/users/me/sessions?startTime=2019-03-06T00:00:00.000Z&endTime=2019-03-09T23:59:59.999Z
+
+https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate

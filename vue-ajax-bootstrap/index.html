@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>READ IT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- favicon - https://realfavicongenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="images/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- BootstrapVue -->
+    <!--<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="css/app.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"/>
+
+    <!-- fonts / icons -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+<body>
+
+<div id="app" >
+    <b-navbar toggleable="md" type="dark" variant="secondary" fixed="top">
+        <b-navbar-brand><i class="fas fa-book-reader"></i>&nbsp;&nbsp;&nbsp;Read It</b-navbar-brand>
+
+        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+        <b-collapse is-nav id="nav_collapse">
+            <b-navbar-nav>
+                <b-nav-item @click="display('store')" :active="bookshelf == 'store'">Store</b-nav-item>
+                <b-nav-item @click="display('bookmarks')" :active="bookshelf == 'bookmarks'">Bookmarks</b-nav-item>
+                <b-nav-item @click="display('favorites')" :active="bookshelf == 'favorites'">Favorites</b-nav-item>
+            </b-navbar-nav>
+
+            <!-- Right aligned nav items -->
+            <b-navbar-nav class="ml-auto">
+                <b-nav-form @submit.prevent="searchBooks()">
+                    <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" v-model="searchTerm"></b-form-input>
+                    <b-button size="sm" class="my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></b-button>
+                </b-nav-form>
+
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
+
+    <b-container class="bookshelf" fluid>
+        <b-row v-if="searching" class="justify-content-sm-center my-4">
+            <b-col  sm="6">
+                <b-alert show variant="warning">Searching...</b-alert>
+            </b-col>
+        </b-row>
+
+        <b-row v-else-if="books.length > 0">
+            <book v-for="book in books" :key="book.id" :book="book" :favorites="favorites" :bookmarks="bookmarks"></book>
+
+            <!-- extra "shelf space" -->
+            <b-col v-if="(books.length % 2) > 0" class="book shelf d-block d-sm-none"></b-col>
+            <b-col v-if="(books.length % 3) > 0" class="book shelf d-none d-sm-block d-md-none"></b-col>
+            <b-col v-if="(books.length % 4) > 0" class="book shelf d-none d-md-block d-lg-none"></b-col>
+            <b-col v-if="(books.length % 6) > 0" class="book shelf d-none d-lg-block"></b-col>
+        </b-row>
+
+        <b-row v-else class="justify-content-sm-center my-4">
+            <b-col sm="6">
+                <div>
+                    <b-alert show variant="danger">No books found.</b-alert>
+                </div>
+            </b-col>
+        </b-row>
+
+
+    </b-container>
+</div>
+<div class="footer">
+    <div>&copy; 2019 — <strong>READ IT</strong></div>
+</div>
+
+<!-- Vue Libraries/Plugins -->
+<script src="https://unpkg.com/vue@2.6.8/dist/vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.js"></script>
+
+<!-- Vue Application -->
+<script src="js/app-models.js"></script>
+<script src="js/app-components.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>POST IT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <!-- favicon - https://realfavicongenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="images/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- fonts / icons / css -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons|Caveat+Brush|Coming+Soon' rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+<div id="app">
+    <v-app>
+        <!-- SLIDE OUT DRAWER / MENU-->
+
+        <v-navigation-drawer v-model="drawer" app hide-overlay disable-resize-watcher>
+            <v-list>
+                <div v-for="(item, i) in menuItems">
+                    <v-divider v-if="item.divider" dark class="my-3"></v-divider>
+                    <v-list-tile :key="i" @click="navigate(item)">
+                        <v-list-tile-action></v-list-tile-action>
+                            <v-icon>{{item.icon}}</v-icon>
+                        <v-list-tile-content>
+                            <v-list-tile-tile>{{item.text}}</v-list-tile-tile>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </div>
+            </v-list>
+        </v-navigation-drawer>
+
+
+
+        <!-- TOP TOOLBAR -->
+        <v-toolbar color="primary" app fixed>
+            <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+
+            <span class="site-title">POST IT</span>
+
+            <v-spacer></v-spacer>
+
+            <!-- SEARCH BUTTON AND FIELD -->
+            <v-layout justify-end>
+                <v-flex shrink>
+                    <v-expand-x-transition>
+                        <div v-show="searching">
+                            <v-text-field name="search" label="Search" id="searchbar"
+                                          flat hide-details solo-inverted repend-inner-icon="search"
+                                          v-model="searchTerm"></v-text-field>
+                        </div>
+                    </v-expand-x-transition>
+                </v-flex>
+                <v-btn flat icon @click="searching = !searching"><v-icon>search</v-icon></v-btn>
+            </v-layout>
+        </v-toolbar>
+
+        <!-- MAIN CONTENT AREA -->
+        <v-content class="grey lighten-4" :class="showStatus" fluid grid-list-md text-xs-center>
+            <v-layout justify-center>
+                <v-flex>
+                    <v-container grid-list-lg fluid justify-space-around align-content-start >
+                        <v-layout class="notes" >
+                            <v-flex v-if="!filteredNotes.length && !showStatus" class="no-note">
+                                <!-- image borrowed for education purposes only -->
+                                <!-- source https://www.grammarly.com/blog/duly-noted/ -->
+                                <v-img src="images/dont-forget-it-post-it.gif" contain></v-img>
+                            </v-flex>
+
+                            <v-flex v-for="(note, n) in filteredNotes" class="note">
+                                <v-hover>
+                                    <v-card :color="note.color" class="lighten-2" hover raised slot-scope="{hover}">
+                                        <!-- NOTE TITLE -->
+                                        <v-card-title>
+                                            <h3 v-show="!note.editing">{{note.title}}</h3>
+                                            <v-text-field v-if="note.editing" v-model="note.title" placeholder="Title"
+                                                          solo full-width hide-details flat></v-text-field>
+                                        </v-card-title>
+                                        <!-- NOTE TEXT -->
+                                        <v-card-text>
+                                            <p v-show="!note.editing">{{note.text}}</p>
+                                            <v-textarea v-if="note.editing" placeholder="Notes" v-model="note.text"
+                                                        solo full-width hide-details flat></v-textarea>
+                                        </v-card-text>
+
+                                        <div class="card-action-holder">
+                                            <!-- SAVE / ARCHIVE / TRASH BUTTONS -->
+                                            <v-card-actions v-show="note.editing">
+                                                <!-- ARCHIVE / UNARCHIVE -->
+                                                <v-btn v-if="!note.archived()" flat icon color="black" small
+                                                       @click="archiveNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">archive</v-icon>
+                                                        </template>
+                                                        <span>Archive</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+                                                <v-btn v-if="note.archived()" flat icon color="black" small
+                                                       @click="restoreNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">unarchive</v-icon>
+                                                        </template>
+                                                        <span>Unarchive</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+
+                                                <!-- TRASH / RESTORE -->
+                                                <v-btn v-if="!note.trashed()" flat icon color="black" small
+                                                       @click="trashNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">delete</v-icon>
+                                                        </template>
+                                                        <span>Trash</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+                                                <v-btn v-if="note.trashed()" flat icon color="black" small
+                                                       @click="restoreNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">restore_from_trash</v-icon>
+                                                        </template>
+                                                        <span>Restore</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+
+                                                <!-- SPACER -->
+                                                <v-spacer></v-spacer>
+
+                                                 <!--SAVE -->
+                                                <v-btn flat icon color="black" small @click="saveNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">save</v-icon>
+                                                        </template>
+                                                        <span>Save</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+
+                                            </v-card-actions>
+
+                                            <!-- EDIT / COLOR/ DUPLICATE BUTTONS -->
+                                            <v-card-actions v-show="hover || pickingColor[n]">
+                                                <v-spacer></v-spacer>
+
+                                                <!-- DUPLICATE -->
+                                                <v-btn flat icon color="black" small @click="duplicateNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">add_to_photos</v-icon>
+                                                        </template>
+                                                        <span>Duplicate</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+
+                                                <!-- COLOR CHOOSER -->
+                                                <v-menu left v-model="pickingColor[n]">
+                                                    <v-btn slot="activator" flat icon color="black" small>
+                                                        <v-tooltip top>
+                                                            <template #activator="data">
+                                                                <v-icon v-on="data.on">palette</v-icon>
+                                                            </template>
+                                                            <span>Choose Color</span>
+                                                        </v-tooltip>
+                                                    </v-btn>
+
+                                                    <v-list class="color-chooser">
+                                                        <v-list-tile v-for="(color, i) in colors" :key="i"
+                                                                     :color="color" class="accent-1"
+                                                                     @click="setColor(note, color)">
+                                                            <v-list-tile-title>
+                                                                <v-icon :color="color">brightness_1</v-icon>
+                                                            </v-list-tile-title>
+                                                        </v-list-tile>
+                                                    </v-list>
+                                                </v-menu>
+
+                                                <!-- EDIT -->
+                                                <v-btn flat icon color="black" small @click="editNote(note)">
+                                                    <v-tooltip top>
+                                                        <template #activator="data">
+                                                            <v-icon v-on="data.on">edit</v-icon>
+                                                        </template>
+                                                        <span>Edit</span>
+                                                    </v-tooltip>
+                                                </v-btn>
+
+                                            </v-card-actions>
+                                        </div>
+                                    </v-card>
+                                </v-hover>
+                            </v-flex>
+                        </v-layout>
+
+                        <!-- FAB (Floating Action Button)-->
+                        <v-btn color="deep-purple" dark fab fixed bottom right @click="addNote" v-show="!showStatus">
+                            <v-icon>add</v-icon>
+                        </v-btn>
+
+                    </v-container>
+                </v-flex>
+            </v-layout>
+        </v-content>
+
+        <!-- FOOTER -->
+        <v-footer class="pa-3" color="primary">
+            <v-spacer></v-spacer>
+            <div>&copy; {{ new Date().getFullYear() }} — <strong>POST IT</strong></div>
+            <v-spacer></v-spacer>
+        </v-footer>
+
+        <!-- BOTTOM SNACKBAR FOR MISSING PAGES-->
+        <v-snackbar v-model="snackbarDisplay" :timeout="snackbarTimeout">
+            Page not built yet.
+            <v-btn dark flat @click="snackbarDisplay = false">Okay</v-btn>
+        </v-snackbar>
+    </v-app>
+</div>
+
+<!-- Vue Application -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

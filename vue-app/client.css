@@ -1,0 +1,49 @@
+.navbar > .btn-outline-primary{
+    color: #217554;
+    border-color: #053B41;
+}
+.navbar > .btn-outline-primary:focus{
+    color: #217554;
+    border-color: #053B41;
+    box-shadow: none;
+}
+.navbar > .btn-outline-primary:hover {
+    color: #FFFFFF;
+    background-color: #053B41;
+    border-color: #053B41;
+    text-decoration: none;
+}
+body {
+    background-image: url("images/libhead.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.jumbotron {
+    background: rgba(255, 255, 255, .7);
+    font-family: Algerian;
+    color: #217554;
+    height: 100%;
+}
+.modal-header {
+    font-family: Algerian;
+    color: #000000;
+}
+.modal-body {
+    font-family: Algerian;
+    color: #000000;
+}
+.navbar {
+    font-family: Algerian;
+    background-color: #112f41;
+    border-bottom: 1px solid #dee2e6;
+}
+.navbar .navbar-brand {
+    font-size: 2.5em;
+    line-height: 1.2em;
+    padding: 0;
+    color: #217554;
+}
+h1 {
+    margin: 25px 0;
+    border-bottom: 2px solid #112f41;
+}

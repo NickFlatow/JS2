@@ -1,0 +1,8 @@
+$myColor: #336699;
+
+p {
+  a:link{
+    color: lighten($myColor, 10%);
+  }
+}
+

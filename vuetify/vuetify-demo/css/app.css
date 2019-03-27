@@ -1,0 +1,128 @@
+.application .note, .application .v-input {
+    font-family: 'Coming Soon', 'Roboto', cursive;
+    font-size: 1.1em;
+}
+.v-toolbar .site-title {
+    font-family: 'Caveat Brush', cursive;
+    font-size: 2.2em;
+    padding-left: 10px;
+    white-space: nowrap;
+}
+
+.v-toolbar .site-title {
+    font-family: 'Caveat Brush', cursive;
+    font-size: 2.2em;
+    padding-left: 10px;
+}
+
+.v-footer{
+    font-family: 'Caveat Brush', cursive;
+    font-size: 1.1em;
+}
+
+.v-list__tile__title{
+    font-family: 'Coming Soon', cursive;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* -- ACTIONS -- */
+.card-action-holder {
+    height: 44px;
+}
+
+.color-chooser {
+    overflow: hidden;
+    padding: 10px
+}
+
+.color-chooser .v-list__tile{
+    height: 40px;
+    padding: 0 10px;
+}
+
+.color-chooser > div {
+    float: left;
+}
+
+.color-chooser > div:nth-child(3n+1){
+    clear:both
+}
+
+
+/* -- notes -- */
+.notes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.note.flex {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    flex: none;
+    max-width: 300px;
+}
+
+.no-note.flex {
+    margin-top: 5vh;
+    width: 100%;
+    flex: none;
+    max-width: 600px;
+}
+
+.note .v-card {
+    height: 100%;
+}
+
+
+.note .v-card__text {
+    padding-top: 0;
+    height: 185px;
+    overflow-y: scroll;
+}
+
+.note .v-text-field--full-width>.v-input__control>.v-input__slot,
+.note .v-text-field.v-text-field--solo .v-input__control {
+    min-height: 0;
+}
+.note .v-text-field--full-width.v-text-field--single-line input {
+    margin-top: 0px;
+}
+
+.note textarea {
+    height: 185px;
+}
+
+.theme--light.v-text-field--solo>.v-input__control>.v-input__slot  {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.note .v-card__title {
+    padding: 10px 16px;
+    min-height: 56px;
+}
+
+.note .v-card__title h3 {
+    padding: 6px 0;
+}
+
+/* BACKGROUNDS */
+.trash {
+    background-image: url("../images/trash-bg.jpg");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+}
+
+.trash > .v-content__wrap {
+    background: rgba(255, 255, 255, .5);
+}
+
+.archive {
+    background-image: url("../images/archive-bg.jpg");
+    background-size: 100%;
+    background-repeat: repeat-y;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>todos</title>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+    <script src = "demo.js"></script>
+    <style>
+        .complete{
+            color: gray;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body ng-app = "todoApp">
+    <div ng-controller="todoCtrl">
+        <h1>Todos: {{$storage.todos.length}}</h1>
+        <h3>Need to do:</h3>
+        <ul>
+            <li ng-repeat = "todo in $storage.todos | filter: {done: false}">
+                <input type ="checkbox" ng-model="todo.done">
+                <span class="{{todo.done ? 'complete' : ''}}">{{todo.text}}</span>
+            </li>
+        </ul>
+
+        <h3>Done:</h3>
+        <ul>
+            <li ng-repeat = "todo in getCompleteTodos()">
+                <input type ="checkbox" ng-model="todo.done">
+                <span class="{{todo.done ? 'complete' : ''}}">{{todo.text}}</span>
+            </li>
+        </ul>
+        <button ng-click="clearCompleted()">Clear Completed</button>
+        <hr>
+
+        <form>
+            <label>New Todo:<input type="text" ng-model="newTodo"></label>
+            <button ng-click="addTodo()">Add</button>
+            <br>
+            {{newTodo}}
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST IT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<button id="add">Add Tacos</button>
+
+<div id="list"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+
+<!-- Vue Application -->
+<script src="js/app-models.js"></script>
+<script>
+    // add recipe
+    document.getElementById('add').onclick = function(e){
+        let recipe = new Recipe();
+        recipe.name = 'Tacos';
+        recipe.description = 'Very tasty.';
+        recipe.ingredients = ['Meat', 'Cheese', 'Other Stuff'];
+        recipe.directions = ['Mix ingredients.', 'Eat It.'];
+        recipe.rating = 3.5;
+
+        // add recipe
+        db.collection('recipes')
+            .add(recipe)
+            .then(function(docRef) {
+                console.log("Document written:", docRef);
+
+                alert('Added!');
+
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+                alert('Error');
+            });
+    }
+
+    // display recipes
+    window.onload = function(){
+        db.collection('recipes')
+            .onSnapshot(function(querySnapshot) {
+                var recipes = [];
+                document.getElementById('list').innerHTML = '';
+
+                querySnapshot.forEach(function(doc) {
+                    recipes.push(doc.data());
+                    document.getElementById('list').innerHTML += '<h3>' + doc.data().name + '</h3>';
+                    document.getElementById('list').innerHTML += '<p>' + JSON.stringify(doc.data()) + '</p>';
+                });
+
+            });
+    }
+</script>
+
+
+
+</body>
+</html>

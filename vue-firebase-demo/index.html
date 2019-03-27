@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EAT IT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- favicon - https://realfavicongenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#aa2a6a">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#aa2a6a">
+    <meta name="msapplication-config" content="images/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- BootstrapVue -->
+    <!--<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="css/app.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"/>
+
+    <!-- fonts / icons -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Signika+Negative:700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+<body>
+
+<div id="app" >
+    <b-navbar toggleable="md" type="dark" variant="primary" fixed="top">
+        <b-navbar-brand>
+            <a href="https://www.youtube.com/watch?v=ZcJjMnHoIBI" target="_blank"><img src="images/fork-white.png" class="logo"></a> EAT IT
+        </b-navbar-brand>
+
+        <b-navbar-nav class="ml-auto">
+            <b-button @click="addRecipeModal = !addRecipeModal" variant="outline-light"><i class="fas fa-plus"></i> Add It</b-button>
+        </b-navbar-nav>
+
+    </b-navbar>
+
+    <b-container fluid>
+        <recipe v-for="recipe in recipes" :recipe="recipe" :key="recipe.id"></recipe>
+    </b-container>
+
+
+    <!-- Modal Component -->
+    <b-modal v-model="addRecipeModal" title="Submit a Recipe"
+             header-bg-variant="primary" header-text-variant="light"
+             ok-title="Add Recipe" @ok="addRecipe">
+
+        <b-tabs content-class="mt-3">
+            <b-tab title="Description" active>
+                <b-form-group label="Name:" label-for="name">
+                    <b-form-input
+                            id="name"
+                            v-model="newRecipe.recipe.name"
+                            required
+                            ></b-form-input>
+                </b-form-group>
+
+                <b-form-group label="Image:" label-for="image">
+                    <b-form-file id="image" v-model="newRecipe.image"></b-form-file>
+                </b-form-group>
+
+                <b-form-group label="Description:" label-for="description">
+                    <b-form-textarea id="description" v-model="newRecipe.recipe.description" rows="5" max-rows="5" required></b-form-textarea>
+                </b-form-group>
+
+            </b-tab>
+            <b-tab title="Ingredients">
+                <b-row v-for="(ingredient, i) in newRecipe.recipe.ingredients" no-gutters>
+                    <b-col cols="10">
+                        <b-form-group>
+                            <b-form-input v-model="newRecipe.recipe.ingredients[i]" required></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col cols="2">
+                        &nbsp;<b-button size="sm" @click="newRecipe.recipe.ingredients.splice(i, 1)" variant="link"><i class="fas fa-minus"></i></b-button>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <b-button size="sm" @click="newRecipe.recipe.ingredients.push('')">Add Ingredient</b-button>
+                    </b-col>
+                </b-row>
+            </b-tab>
+
+            <b-tab title="Directions">
+                <b-row v-for="(direction, i) in newRecipe.recipe.directions" no-gutters>
+                    <b-col cols="10">
+                        <b-form-group>
+                            <b-form-input v-model="newRecipe.recipe.directions[i]"required></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col cols="2">
+                        &nbsp;<b-button size="sm" @click="newRecipe.recipe.directions.splice(i, 1)" variant="link"><i class="fas fa-minus"></i></b-button>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <b-button size="sm" @click="newRecipe.recipe.directions.push('')">Add Step</b-button>
+                    </b-col>
+                </b-row>
+            </b-tab>
+        </b-tabs>
+    </b-modal>
+</div>
+<div class="footer">
+    <div>&copy; 2019 — <strong>EAT IT</strong></div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+
+<!-- Vue Libraries/Plugins -->
+<script src="https://unpkg.com/vue@2.6.8/dist/vue.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<!--<script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>--> <!-- for use with realtime database -->
+<script src="https://unpkg.com/vuefire@2.0.0-alpha.20/dist/vuefire.js"></script><!-- for use with firestore -->
+<script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.js"></script>
+
+<!-- Vue Application -->
+<script src="js/app-models.js"></script>
+<script src="js/app-components.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

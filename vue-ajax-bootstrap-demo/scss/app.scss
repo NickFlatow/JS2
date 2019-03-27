@@ -1,0 +1,161 @@
+@import "bootstrap";
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: url("../images/background.jpg") repeat;
+}
+
+nav, .btn, h1, h2, h3, h4, h5, h6, .footer {
+  text-transform: uppercase;
+  font-family: 'Roboto Slab', serif;
+  letter-spacing: .05em;
+}
+
+// ----- APP / LAYOUT -----
+
+nav {
+  .navbar-brand {
+    font-size: 1.7rem;
+    margin-right: .5rem;
+  }
+
+  .nav-item {
+    line-height: 2.2rem;
+    margin-left: .6rem;
+  }
+
+  .form-inline {
+    justify-content: space-between;
+  }
+
+  @include media-breakpoint-down(sm) {
+    .form-inline .form-control {
+      width: 85%;
+    }
+    .form-inline .btn {
+      margin-right: 10px;
+    }
+  }
+
+}
+
+#app {
+  display: flex;
+  padding-top: 100px;
+  padding-bottom: 40px;
+  min-height: 100vh;
+}
+
+.navbar {
+  padding-bottom: 26px;
+  background: url("../images/shelf.jpg") bottom -11px center repeat-x;
+  box-shadow: 0px 0px 5px 5px rgba(46,20,7,1);
+  align-items: start;
+
+}
+
+.footer {
+  height: 40px;
+  margin-top: -40px;
+  padding-top: 3px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+}
+
+
+// ---- BOOKS -----
+
+.bookshelf {
+  .alert{
+    position: relative;
+    text-align: center;
+  }
+
+  .shelf{
+    padding-top: 10px;
+    padding-bottom: 30px;
+    background: url("../images/shelf.jpg") bottom center repeat-x;
+    align-self: flex-end;
+    text-align: center;
+  }
+}
+
+.book{
+  display: inline-block;
+
+  .thumbnail {
+    box-shadow: 2px 0px 1px 1px rgba(46, 20, 7, .5);
+    border: 1px solid rgba(46, 20, 7, 1);
+  }
+
+  .btn-toolbar {
+    display:none;
+    justify-content: center;
+    margin-top: -43px;
+    margin-bottom: 5px;
+
+    .btn {
+      background-color: rgba(90, 28, 5, .8);
+      border-color: rgba(90, 28, 5, .9);
+    }
+
+    .btn:hover {
+      background-color: rgba(90, 28, 5, .9);
+    }
+
+    .btn:hover i {
+      transform: scale(1.2);
+    }
+  }
+
+  &:hover {
+    .thumbnail {
+      cursor: pointer;
+      transform: scale(1.05) translateY(-2.5%);
+    }
+
+    .btn-toolbar {
+      display: flex;
+    }
+  }
+}
+
+.book-details{
+  .modal-xl {
+    width: 95vw;
+    max-width: none;
+  }
+
+  .modal-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  img {
+    border: 2px solid rgba(90, 28, 5, 1);
+  }
+
+  dl {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  dl dt {
+    min-width: 110px;
+    flex: 0 0 30%;
+  }
+  dl dd {
+    margin-left: auto;
+    text-align: left;
+    flex: 1 0 70%;
+  }
+
+  @include media-breakpoint-only(xs) {
+    .col-preview {
+      border-bottom: 2px solid $secondary;
+      margin-bottom: 10px;
+    }
+  }
+}
+
