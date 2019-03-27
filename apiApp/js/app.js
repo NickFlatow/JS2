@@ -154,7 +154,15 @@ var app = new Vue({
         },
         mondaySteps: function() {
             return this.stepsBucket[1];
+        },
+        tuesdaySteps: function() {
+            // console.log(stepsBucket[2]);
+            return this.stepsBucket[2];
+        },
+        wednesdaySteps: function(){
+            return this.stepsBucket[3];
         }
+
     },
     mounted: function(){
 
