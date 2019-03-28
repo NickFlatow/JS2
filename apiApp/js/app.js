@@ -6,7 +6,8 @@ var app = new Vue({
         weeklySession: new Session(),
         stepsBucket: new Session(),
         message:'Hello',
-        loggedIn: false
+        loggedIn: false,
+        authUser: null
     },
 
     methods:{
@@ -31,12 +32,13 @@ var app = new Vue({
 
                 });
             }
+            console.log(this.loggedIn);
             this.toggle();
             this.getData();
             this.getStepsBucket();
         },
         toggle: function(){
-          this.loggedIn = !this.loggedIn
+            this.loggedIn = !this.loggedIn;
         },
         getData(){
             var authCode = 'Bearer ' + localStorage.getItem('token');
