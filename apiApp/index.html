@@ -7,12 +7,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
-
+<meta name="google-signin-client_id" content="YOUR_CLIENT_ID">
         <div id="app">
-            <button type ="button" @click="handleClientLoad">Refresh Token</button>
+            <button type ="button" @click="login">login</button>
+            <!--<button type ="button" @click="handleClientLoad">login2</button>-->
+            <button type ="button" @click="logout">logout</button>
             <button type ="button" @click="getStepsBucket">Post</button>
             <button type ="button" @click="getData">Get</button>
-            <button type ="button" @click="toggle">LogOut</button>
             <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
             {{loggedIn}}
             <b-container>
@@ -35,11 +36,14 @@
             <!--<h1>{{sundayList}}</h1>-->
         </div>
 <body>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
 
 <!-- Vue Libraries/Plugins -->
 <script src="https://unpkg.com/vue@2.6.8/dist/vue.js"></script>
 <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 <script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.js"></script>
+<script src="https://unpkg.com/vuefire@2.0.0-alpha.20/dist/vuefire.js"></script><!-- for use with firestore -->
 
 <!-- Vue Application -->
 <!--<script src="js/app-models.js"></script>-->

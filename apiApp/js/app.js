@@ -11,37 +11,82 @@ var app = new Vue({
     },
 
     methods:{
-        handleClientLoad() {
-            // Load the API's client and auth2 modules.
-            gapi.load('client:auth2', authClient);
+        // handleClientLoad() {
+        //     // Load the API's client and auth2 modules.
+        //     gapi.load('client:auth2', authClient);
+        //
+        //     function authClient() {
+        //         gapi.auth2.authorize({
+        //             client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
+        //             scope: 'https://www.googleapis.com/auth/fitness.activity.read',
+        //             response_type: 'id_token permission'
+        //         }, function (response) {
+        //             // console.log(response);
+        //             if (response.error) {
+        //                 // An error happened!
+        //                 alert('Token Error!');
+        //                 return;
+        //             }
+        //             //save token to local storage
+        //             localStorage.setItem('token', response.access_token);
+        //             alert("Jello!")
+        //             console.log("client_access_token " + response.access_token);
+        //
+        //         });
+        //     }
+        // },
+        authClient(){
+            gapi.auth2.authorize({
+                client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/fitness.activity.read',
+                response_type: 'id_token permission'
+            }, function (response) {
+                // console.log(response);
+                if (response.error) {
+                    // An error happened!
+                    alert('Token Error!');
+                    return;
+                }
+                //save token to local storage
+                localStorage.setItem('token', response.access_token);
+                // alert("Jello!")
+                console.log("client_access_token " + response.access_token);
 
-            function authClient() {
-                gapi.auth2.authorize({
-                    client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
-                    scope: 'https://www.googleapis.com/auth/fitness.activity.read',
-                    response_type: 'id_token permission'
-                }, function (response) {
-                    // console.log(response);
-                    if (response.error) {
-                        // An error happened!
-                        alert('Token Error!');
-                        return;
-                    }
-                    //save token to local storage
-                    localStorage.setItem('token', response.access_token);
-
-                });
-            }
-            console.log(this.loggedIn);
-            this.toggle();
-            this.getData();
-            this.getStepsBucket();
+            });
         },
-        toggle: function(){
-            this.loggedIn = !this.loggedIn;
+        login(){
+            gapi.load('client:auth2', app.authClient);
+            // this.handleClientLoad();
+            let provider = new firebase.auth.GoogleAuthProvider();
+            // provider.addScope('https://www.googleapis.com/auth/fitness.activity.read');
+
+            firebase.auth()
+                .signInWithPopup(provider)
+                .then(function(result){
+
+
+                    // let token = result.credential.accessToken;
+                    // console.log(token);
+                    // localStorage.setItem('token', token);
+                })
+                .catch(function(error){
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
+                })
+
+        },
+        logout(){
+            firebase.auth().signOut();
+            // 1009293481641-t342tcmr1i60ofqjo8eimci9mr0f3a2d.apps.googleusercontent.com
+            //secret
+            // WeoEeRaiOTOwg1cveeU-VL3V
+        },
+        toggle(){
+          this.loggedIn = !this.loggedIn
         },
         getData(){
-            var authCode = 'Bearer ' + localStorage.getItem('token');
+            var authCode = 'Bearer ya29.GlvZBivBWPZyXxZlkyuZOQBg8XVVtrGK62DwOCwNAMJYD2X4fjGSpoPE4B6-1yEj03aiaunCpAxoRg0PLNVaYVCafqyXLIesgKxIPLVtwRu68LE1uW813E6OIWS8';
+            // var authCode = 'Bearer ' + localStorage.getItem('token');
             // console.log(authCode);
             // console.log(accessToken);
             // var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataSources";
@@ -68,7 +113,9 @@ var app = new Vue({
                 });
         },
         getStepsBucket(){
+            // var authCode = 'Bearer ya29.GlvZBivBWPZyXxZlkyuZOQBg8XVVtrGK62DwOCwNAMJYD2X4fjGSpoPE4B6-1yEj03aiaunCpAxoRg0PLNVaYVCafqyXLIesgKxIPLVtwRu68LE1uW813E6OIWS8'
             var authCode = 'Bearer ' + localStorage.getItem('token');
+            console.log(authCode);
             // we use different device uid to distinguish different data sources of a same type.
             var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
             // You may need dsId.
@@ -184,8 +231,22 @@ var app = new Vue({
 
 
     },
-    mounted: function(){
+    created: function() {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
 
+                console.log('Signed in as: ', user);
+
+                app.authUser = new User(user);
+                app.loggedIn = true;
+            } else {
+                // User is signed out.
+                console.log('Not signed in.');
+
+                app.authUser = null;
+                app.loggedIn = false;
+            }
+        });
     },
     watch:{
 

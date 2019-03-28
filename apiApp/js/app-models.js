@@ -53,11 +53,7 @@ var config = {
     databaseURL: "https://jsdemo-1bedd.firebaseio.com",
     projectId: "jsdemo-1bedd",
     storageBucket: "jsdemo-1bedd.appspot.com",
-    messagingSenderId: "1009293481641",
-
-    client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
-
-    scope: 'https://www.googleapis.com/auth/fitness.activity.read'
+    messagingSenderId: "1009293481641"
 };
 firebase.initializeApp(config);
 
