@@ -1,13 +1,13 @@
+
 var app = new Vue({
     // el: the DOM element to be replaced with a Vue instance
     el: '#app',
 
     data: {
         weeklySession: new Session(),
-        stepsBucket: new Session(),
-        message:'Hello',
-        loggedIn: false,
-        authUser: null
+        stepsBucket: null,
+        //on success of ajax call in getStepsBucket() loggedIn is set to true
+        loggedIn: false
     },
 
     methods:{
@@ -35,6 +35,13 @@ var app = new Vue({
         //         });
         //     }
         // },
+        login(){
+            gapi.load('client:auth2', app.authClient);
+        },
+        login2(){
+            app.getData();
+            app.getStepsBucket();
+        },
         authClient(){
             gapi.auth2.authorize({
                 client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
@@ -49,44 +56,47 @@ var app = new Vue({
                 }
                 //save token to local storage
                 localStorage.setItem('token', response.access_token);
-                // alert("Jello!")
-                console.log("client_access_token " + response.access_token);
+
+                app.getData();
+                app.getStepsBucket();
+
+
 
             });
         },
-        login(){
-            gapi.load('client:auth2', app.authClient);
-            // this.handleClientLoad();
-            let provider = new firebase.auth.GoogleAuthProvider();
-            // provider.addScope('https://www.googleapis.com/auth/fitness.activity.read');
-
-            firebase.auth()
-                .signInWithPopup(provider)
-                .then(function(result){
-
-
-                    // let token = result.credential.accessToken;
-                    // console.log(token);
-                    // localStorage.setItem('token', token);
-                })
-                .catch(function(error){
-                    let errorCode = error.code;
-                    let errorMessage = error.message;
-                })
-
-        },
+        // login(){
+        //     gapi.load('client:auth2', app.authClient);
+        //     // this.handleClientLoad();
+        //     let provider = new firebase.auth.GoogleAuthProvider();
+        //     // provider.addScope('https://www.googleapis.com/auth/fitness.activity.read');
+        //
+        //     firebase.auth()
+        //         .signInWithPopup(provider)
+        //         .then(function(result){
+        //             // app.getStepsBucket();
+        //
+        //             let token = result.credential.accessToken;
+        //             // console.log("firebase " + token);
+        //             // localStorage.setItem('token', token);
+        //             app.authCode = 'Bearer '+ token;
+        //             console.log('app.authCode ' + app.authCode);
+        //         })
+        //         .catch(function(error){
+        //             let errorCode = error.code;
+        //             let errorMessage = error.message;
+        //         })
+        //
+        // }
+        //
         logout(){
             firebase.auth().signOut();
-            // 1009293481641-t342tcmr1i60ofqjo8eimci9mr0f3a2d.apps.googleusercontent.com
-            //secret
-            // WeoEeRaiOTOwg1cveeU-VL3V
         },
         toggle(){
           this.loggedIn = !this.loggedIn
         },
         getData(){
-            var authCode = 'Bearer ya29.GlvZBivBWPZyXxZlkyuZOQBg8XVVtrGK62DwOCwNAMJYD2X4fjGSpoPE4B6-1yEj03aiaunCpAxoRg0PLNVaYVCafqyXLIesgKxIPLVtwRu68LE1uW813E6OIWS8';
-            // var authCode = 'Bearer ' + localStorage.getItem('token');
+            // var authCode = app.authCode;
+            var authCode = 'Bearer ' + localStorage.getItem('token');
             // console.log(authCode);
             // console.log(accessToken);
             // var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataSources";
@@ -104,7 +114,7 @@ var app = new Vue({
 
             axios.get(req_url, { headers: { Authorization: authCode } }).then(response => {
                 this.weeklySession = new Session(response.data.session);
-                console.log(this.weeklySession)
+                // console.log(this.weeklySession)
                 // console.log(response.data.session);
                 })
                 .catch((error) => {
@@ -115,7 +125,7 @@ var app = new Vue({
         getStepsBucket(){
             // var authCode = 'Bearer ya29.GlvZBivBWPZyXxZlkyuZOQBg8XVVtrGK62DwOCwNAMJYD2X4fjGSpoPE4B6-1yEj03aiaunCpAxoRg0PLNVaYVCafqyXLIesgKxIPLVtwRu68LE1uW813E6OIWS8'
             var authCode = 'Bearer ' + localStorage.getItem('token');
-            console.log(authCode);
+            // console.log(authCode);
             // we use different device uid to distinguish different data sources of a same type.
             var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
             // You may need dsId.
@@ -143,17 +153,15 @@ var app = new Vue({
                     xhr.setRequestHeader('Authorization', authCode);
                 },
                 success: function (response) {
-
+                    app.stepsBucket = new Session(response.bucket);
+                    app.loggedIn = true
                     // console.log(stepsBucket);
-                    console.log(response.bucket[0].dataset[0].point[0].value[0].intVal);
+                    // console.log(response.bucket[0].dataset[0].point[0].value[0].intVal);
                 },
                 failure: function(errMsg) {
                     //get new access token
                     alert(errMsg);
                 }
-            }).then(response => {
-                this.stepsBucket = new Session(response.bucket);
-                console.log(this.stepsBucket[0].dataset[0].point[0].value[0].intVal);
             });
         },
         //Returns day of the week
@@ -183,6 +191,65 @@ var app = new Vue({
             return this.weeklySession.filter(function(item){
                 return item.endTimeMillis < endOfDay && item.startTimeMillis > startOfDay;
             });
+        },
+        getDailyActivity(day,at){
+            //get day of the week
+            let theDay = new Date(this.getDayOfWeek(day));
+            // get start of day in milliseconds
+            let startOfDay = theDay.setHours(0,0,0,0)
+            // get end of the day in milliseconds
+            let endOfDay = theDay.setHours(23,59,59,999);
+            // console.log("End of day: " + day + " " + endOfDay);
+            // console.log("Start of day: "+ day + " " + startOfDay);
+            return this.weeklySession.filter(function(item){
+                return item.activityType === at && item.endTimeMillis < endOfDay && item.startTimeMillis > startOfDay;
+            });
+        },
+        getBucket(day){
+            console.log("day: " + day);
+            console.log(this.stepsBucket[day]);
+            if (this.stepsBucket[day].dataset[0].point[0] === undefined){
+                return 0;
+            }else{
+                return this.stepsBucket[day].dataset[0].point[0].value[0].intVal;
+            }
+        },
+        getWeeklySteps(){
+           var weeklySteps =  [];
+
+           for(let i = 0;i <= 6; i++){
+               weeklySteps.push(this.getBucket(i));
+           }
+           return weeklySteps;
+        },
+        isloggedIn(){
+            if (localStorage.getItem("token") === null) {
+                return false;
+            }else{
+                return true;
+            }
+        },
+        getWeeklyMedMins(){
+
+            var medMins = [];
+            var blarg = [];
+
+            for (let i = 0;i <= 6;i++){
+                medMins.push(this.getDailyActivity(i,45));
+            }
+
+            for (let i = 0;i <=6; i++) {
+                blarg.push(medMins[i].reduce((mins, {endTimeMillis, startTimeMillis}) => {
+                        mins += Number(endTimeMillis / 60000).toFixed() - Number(startTimeMillis / 60000).toFixed();
+                    return mins
+                }, 0));
+            }
+
+            console.log(blarg);
+
+
+            console.log(medMins);
+            return blarg;
         }
     },
     computed: {
@@ -208,40 +275,44 @@ var app = new Vue({
             return this.getDayList(6)
         },
         sundaySteps: function() {
-            return this.stepsBucket[0];
+            return this.getBucket(0);
         },
         mondaySteps: function() {
-            return this.stepsBucket[1];
+            return this.getBucket(1);
         },
         tuesdaySteps: function() {
-            // console.log(stepsBucket[2]);
-            return this.stepsBucket[2];
+            return this.getBucket(2);
         },
         wednesdaySteps: function(){
-            return this.stepsBucket[3];
+            return this.getBucket(3);
         },
         thursdaySteps: function() {
-            return this.stepsBucket[4];
-        }
-
-
-        // fridaySteps: function(){
-        //     return this.stepsBucket[5];
+            return this.getBucket(4);
+        },
+        fridaySteps: function(){
+            return this.getBucket(5);
+        },
+        saturdaySteps: function(){
+            return this.getBucket(6);
+        },
+        weeklySteps: function() {
+            return this.getWeeklySteps();
+        },
+        // loggedIn: function() {
+        //     return this.isloggedIn();
         // }
-
-
     },
     created: function() {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
 
-                console.log('Signed in as: ', user);
+                // console.log('Signed in as: ', user);
 
                 app.authUser = new User(user);
                 app.loggedIn = true;
             } else {
                 // User is signed out.
-                console.log('Not signed in.');
+                // console.log('Not signed in.');
 
                 app.authUser = null;
                 app.loggedIn = false;

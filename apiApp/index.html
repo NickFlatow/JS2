@@ -6,35 +6,60 @@
     <script src ="http://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+    <link type="text/css" rel="stylesheet" href="css/client.css"/>
+
+    <!-- Required scripts -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
 </head>
-<meta name="google-signin-client_id" content="YOUR_CLIENT_ID">
-        <div id="app">
-            <button type ="button" @click="login">login</button>
-            <!--<button type ="button" @click="handleClientLoad">login2</button>-->
-            <button type ="button" @click="logout">logout</button>
-            <button type ="button" @click="getStepsBucket">Post</button>
-            <button type ="button" @click="getData">Get</button>
-            <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
-            {{loggedIn}}
-            <b-container>
-                <b-row>
-                    <div v-if="loggedIn">
-                        <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps"></day></b-col>
-                        <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps"></day></b-col>
-                        <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps"></day></b-col>
-                        <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps"></day></b-col>
-                        <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps"></day></b-col>
-                        <!--<day name="Friday" :dayofweek="fridayList"></day>-->
-                        <!--<day name="Saturday" :dayofweek="saturdayList"></day>-->
-                    </div>
-                    <div v-else>
-                        You must be Logged In
-                    </div>
-                </b-row>
-            </b-container>
-            <!--&lt;!&ndash;<list name="Favorite" :items="sunday"></list>&ndash;&gt;-->
-            <!--<h1>{{sundayList}}</h1>-->
+    <div id="app">
+        {{getData}}
+        {{getStepsBucket}}
+        <div>
+            <b-navbar class = "navbar" fixed="top">
+                <b-navbar-brand>
+                    <img src="images/logo.png" height="55" width ="200" class="logo">
+                </b-navbar-brand>
+                <b-navbar-nav class="ml-auto">
+                    <b-button @click="addRecipeModal = !addRecipeModal" variant="outline-light"><i class="fas fa-plus"></i> Add It</b-button>
+                </b-navbar-nav>
+
+            </b-navbar>
         </div>
+        <!--<button type ="button" @click="handleClientLoad">login2</button>-->
+        <b-container class="blarg" fluid >
+        <button type ="button" @click="logout">logout</button>
+        <button type ="button" @click="getStepsBucket">Post</button>
+        <button type ="button" @click="getData">Get</button>
+        <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
+        {{loggedIn}}
+        <!--{{weeklySession}}-->
+        <div v-if="loggedIn">
+
+            {{weeklySteps}}
+            <steps-chart :weeklysteps="weeklySteps"></steps-chart>
+            <med-chart></med-chart>
+            <b-row>
+                <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Friday" :dayofweek="fridayList" :steps="fridaySteps" class="day-style"></day></b-col>
+                <b-col><day name="Saturday" :dayofweek="saturdayList" :steps="saturdaySteps" class="day-style"></day></b-col>
+            </b-row>
+        </div>
+        <div v-else>
+            You must be Logged In
+            <button type ="button" class="google-signin-button" @click="login2">login</button>
+        </div>
+        </b-container>
+
+    </div>
+
 <body>
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
@@ -44,6 +69,10 @@
 <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 <script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.js"></script>
 <script src="https://unpkg.com/vuefire@2.0.0-alpha.20/dist/vuefire.js"></script><!-- for use with firestore -->
+
+<!--charts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
 <!-- Vue Application -->
 <!--<script src="js/app-models.js"></script>-->
