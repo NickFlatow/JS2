@@ -41,7 +41,7 @@
 
             {{weeklySteps}}
             <steps-chart :weeklysteps="weeklySteps"></steps-chart>
-            <med-chart></med-chart>
+            <med-chart :weelymed="weeklyMed"></med-chart>
             <b-row>
                 <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps" class="day-style"></day></b-col>
                 <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps" class="day-style"></day></b-col>
@@ -54,6 +54,7 @@
         </div>
         <div v-else>
             You must be Logged In
+            <button type ="button" class="google-signin-button" @click="login">login1</button>
             <button type ="button" class="google-signin-button" @click="login2">login</button>
         </div>
         </b-container>

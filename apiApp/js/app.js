@@ -298,9 +298,9 @@ var app = new Vue({
         weeklySteps: function() {
             return this.getWeeklySteps();
         },
-        // loggedIn: function() {
-        //     return this.isloggedIn();
-        // }
+        weeklyMed: function(){
+            return this.getWeeklyMedMins();
+        }
     },
     created: function() {
         firebase.auth().onAuthStateChanged(function(user) {

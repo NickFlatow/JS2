@@ -1,5 +1,5 @@
 Vue.component('day', {
-    //use day for calculate if badges were earned
+    //use day to calculate if badges were earned
     //40 mins med per day = yoda
     //activity type 97 = kettle bell
     //activity type running name > 3 = 5k etc.
@@ -79,10 +79,9 @@ Vue.component('steps-chart', {
 Vue.component('med-chart', {
     extends: VueChartJs.Bar,
     props: {
-        weeklysteps: {
-            type: Array,
-            required: true
-            // [17453,9675,18761,4737,10328.6589,0]
+        weeklymed:{
+            type :Array,
+            required:true
         }
     },
     mounted () {
@@ -92,7 +91,8 @@ Vue.component('med-chart', {
                 {
                     label: 'Meditation(minutes)',
                     backgroundColor: '#f87979',
-                    data: this.$parent.getWeeklyMedMins()
+                    data: this.weeklymed
+                    // data: this.$parent.getWeeklyMedMins()
                 },
                 {
                     label:'Goal',
