@@ -1,0 +1,39 @@
+.google-signin-button {
+    color: white;
+    background-color: red;
+    height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 10px 20px 25px 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/*.divider{*/
+    /*position:absolute;*/
+    /*left:50%;*/
+    /*top:10%;*/
+    /*bottom:10%;*/
+    /*border-left:1px solid black;*/
+/*}*/
+.blarg{
+    margin-top: 90px;
+}
+.day-style {
+    position: absolute;
+    height: 100vh;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fdc724+35,fe6604+74,f26c0a+100 */
+    background: #fdc724; /* Old browsers */
+    background: -moz-linear-gradient(top, #fdc724 35%, #fe6604 74%, #f26c0a 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #fdc724 35%, #fe6604 74%, #f26c0a 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #fdc724 35%, #fe6604 74%, #f26c0a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdc724', endColorstr='#f26c0a', GradientType=0); /* IE6-9 */
+}
+
+.navbar{
+    font-family: Algerian;
+    background-color: #050208;
+    border-bottom: 1px solid #dee2e6;
+}
+/*body{*/
+    /*background-color: #050208;*/
+/*}*/
