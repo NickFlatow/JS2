@@ -24,16 +24,16 @@
                     <img src="images/logo.png" height="55" width ="200" class="logo">
                 </b-navbar-brand>
                 <b-navbar-nav class="ml-auto">
-                    <b-button @click="addRecipeModal = !addRecipeModal" variant="outline-light"><i class="fas fa-plus"></i> Add It</b-button>
+                    <b-button @click="logout" variant="outline-light"><i class="fas fa-plus"></i>LogOut</b-button>
                 </b-navbar-nav>
 
             </b-navbar>
         </div>
         <!--<button type ="button" @click="handleClientLoad">login2</button>-->
         <b-container class="blarg" fluid >
-        <button type ="button" @click="logout">logout</button>
-        <button type ="button" @click="getStepsBucket">Post</button>
-        <button type ="button" @click="getData">Get</button>
+
+        <!--<button type ="button" @click="getStepsBucket">Post</button>-->
+        <!--<button type ="button" @click="getData">Get</button>-->
         <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
         {{loggedIn}}
         <!--{{weeklySession}}-->
@@ -54,8 +54,7 @@
         </div>
         <div v-else>
             You must be Logged In
-            <button type ="button" class="google-signin-button" @click="login">login1</button>
-            <button type ="button" class="google-signin-button" @click="login2">login</button>
+            <button type ="button" class="google-signin-button" @click="login">login</button>
         </div>
         </b-container>
 

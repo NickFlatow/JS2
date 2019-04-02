@@ -59,8 +59,6 @@ var app = new Vue({
                 app.getData();
                 app.getStepsBucket();
 
-
-
             });
         },
         // login(){
@@ -88,7 +86,8 @@ var app = new Vue({
         // }
         //
         logout(){
-            firebase.auth().signOut();
+            localStorage.setItem('token', null);
+            location.reload();
         },
         toggle(){
           this.loggedIn = !this.loggedIn
@@ -163,7 +162,7 @@ var app = new Vue({
                 }
             });
         },
-        //Returns day of the week
+        //Returns current day of the week; Ex: day = 3 return a Date object for Tuedsay of the current week
         //day is an int 0-6 representing the day; Sunday = 0, Saturday = 6
         getDayOfWeek(day){
             var date = new Date();
