@@ -12,9 +12,6 @@ Vue.component('day', {
             type: String,
             default: 'Blarg'
         },
-        // steps:{
-        //     type: Object
-        // }
         steps:{
             type: Number,
             default: 0
@@ -30,8 +27,6 @@ Vue.component('day', {
         '            <div class = "row">\n' +
         '            </div>' +
         '            <h1>{{(medMins)}}</h1>'+
-        // '            <h1 v-if="steps.dataset[0].point[0].value[0]">{{steps.dataset[0].point[0].value[0].intVal}}</h1>'+
-        // '            <h1 v-else>0</h1> '+
         '            <h1>{{steps}}</h1>'+
         '         </div>',
     computed: {
@@ -61,7 +56,7 @@ Vue.component('steps-chart', {
             datasets: [
                 {
                     label: 'Steps',
-                    backgroundColor: '#f87979',
+                    backgroundColor: '#3985C3',
                     data: this.weeklysteps
                     // data: this.$parent.getWeeklySteps()
                 },
@@ -83,7 +78,12 @@ Vue.component('med-chart', {
         weeklymed:{
             type :Array,
             required:true
-        }
+        },
+
+        goals:{
+            type : Object,
+            required:true
+        },
     },
     mounted () {
         console.log('mounted')
@@ -92,18 +92,51 @@ Vue.component('med-chart', {
             datasets: [
                 {
                     label: 'Meditation(minutes)',
-                    backgroundColor: '#f87979',
+                    backgroundColor: '#e7823e',
                     data: this.weeklymed
                     // data: this.$parent.getWeeklyMedMins()
                 },
                 {
                     label:'Goal',
                     backgroundColor: '#0d17f8',
-                    data: [40,40,40,40,40,40,40,0]
+                    data: this.goals.meditations
                 }
 
             ]
         }, {responsive: true, maintainAspectRatio: false})
+    },
+
+    watch: {
+        goals: {
+            handler: function (val, oldVal) {
+                this.$data._chart.update();
+            },
+            deep: true
+        },
+    }
+
+});
+
+Vue.component('goals-modal',{
+    props: {
+        goals:{
+            type: Object,
+            required: true
+        }
+    },
+    methods: {
+    },
+    template: ''+
+       '    <div>\n' +
+        '                <b-button v-b-modal.modal-1>Set Goals</b-button>\n' +
+        '                <!-- Modal Component -->' +
+        '                <b-modal id="modal-1" title="BootstrapVue">\n' +
+        '                    Monday:<input type="text" v-model="goals.steps[1]">\n' +
+        '                    Monday:<input type="text" v-model="goals.steps[2]">\n' +
+        '                </b-modal>\n' +
+        '            </div>',
+    computed: {
+
     }
 
 });

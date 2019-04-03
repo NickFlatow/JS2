@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
     <link type="text/css" rel="stylesheet" href="css/client.css"/>
@@ -23,25 +24,30 @@
                 <b-navbar-brand>
                     <img src="images/logo.png" height="55" width ="200" class="logo">
                 </b-navbar-brand>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Set Goals<span class="sr-only"></span></a>
+                </li>
+                <goals-modal :goals="goals"></goals-modal>
                 <b-navbar-nav class="ml-auto">
-                    <b-button @click="logout" variant="outline-light"><i class="fas fa-plus"></i>LogOut</b-button>
+                    <b-button @click="logout" variant="outline-light">LogOut</b-button>
                 </b-navbar-nav>
 
             </b-navbar>
         </div>
-        <!--<button type ="button" @click="handleClientLoad">login2</button>-->
         <b-container class="blarg" fluid >
-
-        <!--<button type ="button" @click="getStepsBucket">Post</button>-->
-        <!--<button type ="button" @click="getData">Get</button>-->
-        <!--<button type ="button" @click="googleLogOut">LogOut</button>-->
-        {{loggedIn}}
-        <!--{{weeklySession}}-->
         <div v-if="loggedIn">
+            <!--<h1 class = "header steps"><img src="images/steps.png">Steps</h1>-->
+            <h1 class = "header steps"><i class="fas fa-shoe-prints"></i>Steps</h1>
 
-            {{weeklySteps}}
             <steps-chart :weeklysteps="weeklySteps"></steps-chart>
-            <med-chart v-if="weeklySession" :weeklymed="weeklyMed"></med-chart>
+            <hr>
+            <h1 class ="header med"><i class="fas fa-ice-cream"></i>Meditation</h1>
+            <h1 class ="header med"><i class="fas fa-circle"></i>Meditation</h1>
+            <med-chart v-if="weeklySession" :weeklymed="weeklyMed" :goals="goals"></med-chart>
+
+
+
+            <hr>
             <b-row>
                 <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps" class="day-style"></day></b-col>
                 <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps" class="day-style"></day></b-col>
@@ -53,7 +59,6 @@
             </b-row>
         </div>
         <div v-else>
-            You must be Logged In
             <button type ="button" class="google-signin-button" @click="login">login</button>
         </div>
         </b-container>

@@ -6,38 +6,15 @@ var app = new Vue({
     data: {
         weeklySession: null,
         stepsBucket: null,
-        loggedIn: false
+        loggedIn: false,
+        goals: {steps: [20,30,0,0,50,0,0,0], meditations: [60,0,25,0,17,0,0]}
     },
 
     methods:{
-        // handleClientLoad() {
-        //     // Load the API's client and auth2 modules.
-        //     gapi.load('client:auth2', authClient);
-        //
-        //     function authClient() {
-        //         gapi.auth2.authorize({
-        //             client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
-        //             scope: 'https://www.googleapis.com/auth/fitness.activity.read',
-        //             response_type: 'id_token permission'
-        //         }, function (response) {
-        //             // console.log(response);
-        //             if (response.error) {
-        //                 // An error happened!
-        //                 alert('Token Error!');
-        //                 return;
-        //             }
-        //             //save token to local storage
-        //             localStorage.setItem('token', response.access_token);
-        //             alert("Jello!")
-        //             console.log("client_access_token " + response.access_token);
-        //
-        //         });
-        //     }
-        // },
         login(){
             gapi.load('client:auth2', app.authClient);
         },
-        login2(){
+        loadGoogle(){
             this.getData();
             this.getStepsBucket();
         },
@@ -61,30 +38,6 @@ var app = new Vue({
 
             });
         },
-        // login(){
-        //     gapi.load('client:auth2', app.authClient);
-        //     // this.handleClientLoad();
-        //     let provider = new firebase.auth.GoogleAuthProvider();
-        //     // provider.addScope('https://www.googleapis.com/auth/fitness.activity.read');
-        //
-        //     firebase.auth()
-        //         .signInWithPopup(provider)
-        //         .then(function(result){
-        //             // app.getStepsBucket();
-        //
-        //             let token = result.credential.accessToken;
-        //             // console.log("firebase " + token);
-        //             // localStorage.setItem('token', token);
-        //             app.authCode = 'Bearer '+ token;
-        //             console.log('app.authCode ' + app.authCode);
-        //         })
-        //         .catch(function(error){
-        //             let errorCode = error.code;
-        //             let errorMessage = error.message;
-        //         })
-        //
-        // }
-        //
         logout(){
             localStorage.setItem('token', null);
             location.reload();
@@ -227,6 +180,26 @@ var app = new Vue({
                 return true;
             }
         },
+        // getWeeklyMedMins(){
+        //
+        //     var medMins = [];
+        //     var blarg = [];
+        //
+        //     for (let i = 0;i <= 6;i++){
+        //         medMins.push(this.getDailyActivity(i,45));
+        //     }
+        //
+        //     for (let i = 0;i <=6; i++) {
+        //         blarg.push(medMins[i].reduce((mins, {endTimeMillis, startTimeMillis}) => {
+        //                 mins += Number(endTimeMillis / 60000).toFixed() - Number(startTimeMillis / 60000).toFixed();
+        //             return mins
+        //         }, 0));
+        //     }
+        //
+        //     console.log(blarg);
+        //     console.log(medMins);
+        //     return blarg;
+        // },
         getWeeklyMedMins(){
 
             var medMins = [];
@@ -234,9 +207,6 @@ var app = new Vue({
 
             for (let i = 0;i <= 6;i++){
                 medMins.push(this.getDailyActivity(i,45));
-            }
-
-            for (let i = 0;i <=6; i++) {
                 blarg.push(medMins[i].reduce((mins, {endTimeMillis, startTimeMillis}) => {
                         mins += Number(endTimeMillis / 60000).toFixed() - Number(startTimeMillis / 60000).toFixed();
                     return mins
@@ -246,7 +216,7 @@ var app = new Vue({
             console.log(blarg);
             console.log(medMins);
             return blarg;
-        }
+        },
     },
     computed: {
         sundayList: function() {
@@ -295,32 +265,18 @@ var app = new Vue({
             return this.getWeeklySteps();
         },
         weeklyMed: function(){
-            console.log("jello")
+            console.log("jello");
             return this.getWeeklyMedMins();
         }
     },
     mounted: function() {
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //     if (user) {
-        //
-        //         // console.log('Signed in as: ', user);
-        //
-        //         app.authUser = new User(user);
-        //         app.loggedIn = true;
-        //     } else {
-        //         // User is signed out.
-        //         // console.log('Not signed in.');
-        //
-        //         app.authUser = null;
-        //         app.loggedIn = false;
-        //     }
-        // });
-
-
         if(this.isloggedIn()){
-            console.log('is logged in')
-            this.login2();
+            console.log('logged in');
+            this.loadGoogle();
+        }else{
+            console.log('logged out');
         }
+    //    settime out
     },
     watch:{
 
