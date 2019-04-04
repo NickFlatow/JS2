@@ -47,7 +47,10 @@ Vue.component('steps-chart', {
         weeklysteps: {
             type: Array,
             required: true
-            // [17453,9675,18761,4737,10328.6589,0]
+        },
+        goals: {
+            type: Object,
+            required: true
         }
     },
     mounted () {
@@ -63,11 +66,19 @@ Vue.component('steps-chart', {
                 {
                     label:'Goal',
                     backgroundColor: '#0d17f8',
-                    data: [5000,5000,5000,5000,5000,5000,5000]
+                    data: this.goals.steps
                 }
 
             ]
         }, {responsive: true, maintainAspectRatio: false})
+    },
+    watch: {
+        goals: {
+            handler: function (val, oldVal) {
+                this.$data._chart.update();
+            },
+            deep: true
+        },
     }
 
 });
@@ -127,14 +138,34 @@ Vue.component('goals-modal',{
     methods: {
     },
     template: ''+
-       '    <div>\n' +
-        '                <b-button v-b-modal.modal-1>Set Goals</b-button>\n' +
+        '<div>\n' +
+        ' <b-button v-b-modal.modal-1>Set Goals</b-button>\n' +
         '                <!-- Modal Component -->' +
-        '                <b-modal id="modal-1" title="BootstrapVue">\n' +
-        '                    Monday:<input type="text" v-model="goals.steps[1]">\n' +
-        '                    Monday:<input type="text" v-model="goals.steps[2]">\n' +
-        '                </b-modal>\n' +
-        '            </div>',
+            '<b-modal id="modal-1" title="Set Your Daily Goals">\n' +
+                '<div class= "parent">'+
+                    '<div class = "steps">'+
+                    '        <h5><b>Steps</b></h5>'+
+                    '        Sunday:<input type="text" v-model="goals.steps[0]">\n' +
+                    '        Monday:<input type="text" v-model="goals.steps[1]">\n' +
+                    '        Tuesday:<input type="text" v-model="goals.steps[2]">\n' +
+                    '        Wednesday:<input type="text" v-model="goals.steps[3]">\n' +
+                    '        Thursday:<input type="text" v-model="goals.steps[4]">\n' +
+                    '        Friday:<input type="text" v-model="goals.steps[5]">\n' +
+                    '        Saturday:<input type="text" v-model="goals.steps[6]">\n' +
+                    '</div>'+
+                    '<div class ="med">'+
+                    '         <h5><b>Meditation</b></h5>          '+
+                    '         Sunday:<input type="text" v-model="goals.meditations[0]">\n' +
+                    '         Monday:<input type="text" v-model="goals.meditations[1]">\n' +
+                    '         Tuesday:<input type="text" v-model="goals.meditations[2]">\n' +
+                    '         Wednesday:<input type="text" v-model="goals.meditations[3]">\n' +
+                    '         Thursday:<input type="text" v-model="goals.meditations[4]">\n' +
+                    '         Friday:<input type="text" v-model="goals.meditations[5]">\n' +
+                    '         Saturday:<input type="text" v-model="goals.meditations[6]">\n' +
+                    '</div>'+
+                '</div>'+
+            '</b-modal>\n' +
+        '</div>',
     computed: {
 
     }

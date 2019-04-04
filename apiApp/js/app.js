@@ -7,7 +7,7 @@ var app = new Vue({
         weeklySession: null,
         stepsBucket: null,
         loggedIn: false,
-        goals: {steps: [20,30,0,0,50,0,0,0], meditations: [60,0,25,0,17,0,0]}
+        goals: {steps: [5000,5000,5000,5000,5000,5000,5000,5000], meditations: [40,40,40,40,40,40,40]}
     },
 
     methods:{

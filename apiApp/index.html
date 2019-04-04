@@ -24,9 +24,6 @@
                 <b-navbar-brand>
                     <img src="images/logo.png" height="55" width ="200" class="logo">
                 </b-navbar-brand>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Set Goals<span class="sr-only"></span></a>
-                </li>
                 <goals-modal :goals="goals"></goals-modal>
                 <b-navbar-nav class="ml-auto">
                     <b-button @click="logout" variant="outline-light">LogOut</b-button>
@@ -34,15 +31,14 @@
 
             </b-navbar>
         </div>
-        <b-container class="blarg" fluid >
+        <b-container class="topmargin" fluid >
         <div v-if="loggedIn">
-            <!--<h1 class = "header steps"><img src="images/steps.png">Steps</h1>-->
-            <h1 class = "header steps"><i class="fas fa-shoe-prints"></i>Steps</h1>
+            <h1 class = "stepsheader"><i class="fas fa-shoe-prints"></i>Steps</h1>
 
-            <steps-chart :weeklysteps="weeklySteps"></steps-chart>
+            <steps-chart :weeklysteps="weeklySteps" :goals="goals"></steps-chart>
             <hr>
-            <h1 class ="header med"><i class="fas fa-ice-cream"></i>Meditation</h1>
-            <h1 class ="header med"><i class="fas fa-circle"></i>Meditation</h1>
+            <h1 class ="medheader"><i class="fas fa-ice-cream"></i>Meditation</h1>
+            <h1 class ="medheader"><i class="fas fa-circle"></i>Meditation</h1>
             <med-chart v-if="weeklySession" :weeklymed="weeklyMed" :goals="goals"></med-chart>
 
 

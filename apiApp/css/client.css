@@ -7,20 +7,42 @@
     padding: 10px 20px 25px 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.blarg{
+.topmargin{
     margin-top: 90px;
 }
 .header{
-    font-family: Typewolf;
+
 }
 .navbar {
     font-family: Algerian;
     background-color: #050208;
     border-bottom: 1px solid #dee2e6;
 }
-.med{
+.medheader{
     color: #e7823e;
+    font-family: Typewolf;
 }
-.steps{
+.stepsheader{
     color: #3985C3;
+    font-family: Typewolf;
+}
+input{
+    width: 233px;
+}
+
+/*parent steps and med are for the modal window */
+.parent {
+    display: flex;
+}
+.steps {
+    width: 50%;
+    background: #3985C3;
+}
+.med {
+    /* Grow to rest of parent */
+    flex: 1;
+    background: #E7823E;
+}
+body{
+    font-family: Typewolf;
 }
