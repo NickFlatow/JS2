@@ -7,7 +7,7 @@ var app = new Vue({
         weeklySession: null,
         stepsBucket: null,
         loggedIn: false,
-        goals: {steps: [5000,5000,5000,5000,5000,5000,5000,5000], meditations: [40,40,40,40,40,40,40]}
+        goals: {steps: [5000,5000,5000,5000,5000,5000,5000,5000], meditations: [40,40,40,40,40,40,40,0]}
     },
 
     methods:{
@@ -18,15 +18,14 @@ var app = new Vue({
             this.getData();
             this.getStepsBucket();
         },
+        //authorize client with google authorization
         authClient(){
             gapi.auth2.authorize({
                 client_id: '136129714002-ppsnkh4o55ai8bq6ttgrpfker688s4u4.apps.googleusercontent.com',
                 scope: 'https://www.googleapis.com/auth/fitness.activity.read',
                 response_type: 'id_token permission'
             }, function (response) {
-                // console.log(response);
                 if (response.error) {
-                    // An error happened!
                     alert('Token Error!');
                     return;
                 }
@@ -74,14 +73,15 @@ var app = new Vue({
                 });
         },
         getStepsBucket(){
-            // var authCode = 'Bearer ya29.GlvZBivBWPZyXxZlkyuZOQBg8XVVtrGK62DwOCwNAMJYD2X4fjGSpoPE4B6-1yEj03aiaunCpAxoRg0PLNVaYVCafqyXLIesgKxIPLVtwRu68LE1uW813E6OIWS8'
+            //get token from local storage
             var authCode = 'Bearer ' + localStorage.getItem('token');
-            // console.log(authCode);
-            // we use different device uid to distinguish different data sources of a same type.
+
             var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
-            // You may need dsId.
-            // var dsId = "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps";
+
+            //get first day of the current week
             let sunday = new Date(this.getDayOfWeek(0));
+
+            //get last day of the current week
             let saturday = new Date(this.getDayOfWeek(6));
             $.ajax({
                 type: "POST",
@@ -106,8 +106,6 @@ var app = new Vue({
                 success: function (response) {
                     app.stepsBucket = new Session(response.bucket);
                     app.loggedIn = true
-                    // console.log(stepsBucket);
-                    // console.log(response.bucket[0].dataset[0].point[0].value[0].intVal);
                 },
                 failure: function(errMsg) {
                     //get new access token
@@ -180,26 +178,6 @@ var app = new Vue({
                 return true;
             }
         },
-        // getWeeklyMedMins(){
-        //
-        //     var medMins = [];
-        //     var blarg = [];
-        //
-        //     for (let i = 0;i <= 6;i++){
-        //         medMins.push(this.getDailyActivity(i,45));
-        //     }
-        //
-        //     for (let i = 0;i <=6; i++) {
-        //         blarg.push(medMins[i].reduce((mins, {endTimeMillis, startTimeMillis}) => {
-        //                 mins += Number(endTimeMillis / 60000).toFixed() - Number(startTimeMillis / 60000).toFixed();
-        //             return mins
-        //         }, 0));
-        //     }
-        //
-        //     console.log(blarg);
-        //     console.log(medMins);
-        //     return blarg;
-        // },
         getWeeklyMedMins(){
 
             var medMins = [];
@@ -212,9 +190,9 @@ var app = new Vue({
                     return mins
                 }, 0));
             }
-
-            console.log(blarg);
-            console.log(medMins);
+            //
+            // console.log(blarg);
+            // console.log(medMins);
             return blarg;
         },
     },
@@ -276,7 +254,7 @@ var app = new Vue({
         }else{
             console.log('logged out');
         }
-    //    settime out
+    //    set time out for five mins call load google
     },
     watch:{
 

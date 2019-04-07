@@ -46,3 +46,10 @@ input{
 body{
     font-family: Typewolf;
 }
+.modal-backdrop {
+    background-color: blue;
+}
+.alert{
+    text-align:center;
+    /*width:30%;*/
+}

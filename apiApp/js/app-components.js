@@ -139,9 +139,9 @@ Vue.component('goals-modal',{
     },
     template: ''+
         '<div>\n' +
-        ' <b-button v-b-modal.modal-1>Set Goals</b-button>\n' +
+        ' <b-button v-b-modal.modal variant="outline-light">Set Goals</b-button>\n' +
         '                <!-- Modal Component -->' +
-            '<b-modal id="modal-1" title="Set Your Daily Goals">\n' +
+            '<b-modal id="modal" title="Set Your Daily Goals">\n' +
                 '<div class= "parent">'+
                     '<div class = "steps">'+
                     '        <h5><b>Steps</b></h5>'+
@@ -154,7 +154,7 @@ Vue.component('goals-modal',{
                     '        Saturday:<input type="text" v-model="goals.steps[6]">\n' +
                     '</div>'+
                     '<div class ="med">'+
-                    '         <h5><b>Meditation</b></h5>          '+
+                    '         <h5><b>Meditation minutes</b></h5>          '+
                     '         Sunday:<input type="text" v-model="goals.meditations[0]">\n' +
                     '         Monday:<input type="text" v-model="goals.meditations[1]">\n' +
                     '         Tuesday:<input type="text" v-model="goals.meditations[2]">\n' +

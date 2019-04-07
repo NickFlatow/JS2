@@ -24,11 +24,11 @@
                 <b-navbar-brand>
                     <img src="images/logo.png" height="55" width ="200" class="logo">
                 </b-navbar-brand>
-                <goals-modal :goals="goals"></goals-modal>
+                <goals-modal v-if="loggedIn" :body-bg-variant="dark" :goals="goals"></goals-modal>
                 <b-navbar-nav class="ml-auto">
-                    <b-button @click="logout" variant="outline-light">LogOut</b-button>
+                    <b-button v-if="loggedIn" @click="logout" variant="outline-light">Log Out</b-button>
+                    <b-button v-if="!loggedIn" @click="login" variant="light">Log In</b-button>
                 </b-navbar-nav>
-
             </b-navbar>
         </div>
         <b-container class="topmargin" fluid >
@@ -38,24 +38,25 @@
             <steps-chart :weeklysteps="weeklySteps" :goals="goals"></steps-chart>
             <hr>
             <h1 class ="medheader"><i class="fas fa-ice-cream"></i>Meditation</h1>
-            <h1 class ="medheader"><i class="fas fa-circle"></i>Meditation</h1>
+            <!--<h1 class ="medheader"><i class="fas fa-circle"></i>Meditation</h1>-->
             <med-chart v-if="weeklySession" :weeklymed="weeklyMed" :goals="goals"></med-chart>
 
 
 
-            <hr>
-            <b-row>
-                <b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Friday" :dayofweek="fridayList" :steps="fridaySteps" class="day-style"></day></b-col>
-                <b-col><day name="Saturday" :dayofweek="saturdayList" :steps="saturdaySteps" class="day-style"></day></b-col>
-            </b-row>
+            <!--<hr>-->
+            <!--<b-row>-->
+                <!--<b-col><day name="Sunday" :dayofweek="sundayList" :steps="sundaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Monday" :dayofweek="mondayList" :steps="mondaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Tuesday" :dayofweek="tuesdayList" :steps="tuesdaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Wednesday" :dayofweek="wednesdayList" :steps="wednesdaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Thursday" :dayofweek="thursdayList" :steps="thursdaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Friday" :dayofweek="fridayList" :steps="fridaySteps" class="day-style"></day></b-col>-->
+                <!--<b-col><day name="Saturday" :dayofweek="saturdayList" :steps="saturdaySteps" class="day-style"></day></b-col>-->
+            <!--</b-row>-->
         </div>
         <div v-else>
-            <button type ="button" class="google-signin-button" @click="login">login</button>
+            <!--<button type ="button" class="google-signin-button" @click="login">login</button>-->
+            <b-alert show>You must be logged in to see your data</b-alert>
         </div>
         </b-container>
 
