@@ -116,47 +116,77 @@ Vue.component('steps-chart', {
                   },
                   spanGaps: true
               }
-              //this.renderChart
+          //this.renderChart
           )
       },
-      changeColors(){
+      changeGraphColors(){
+          console.log("changeGraphColors");
           for(let i = 0; i < 7;i++){
               let steps = this.weeklysteps[i];
-
-              switch (steps){
-                  case steps >= this.goals.steps[0]:
-                      //get day of week method
-                      break;
-
-
+              let green = 'rgba(30, 130, 76, 1)';
+              let yellow = 'rgba(245, 229, 27, 1)';
+              let red = 'rgba(207, 0, 15, 1)';
+              console.log(steps, this.goals.steps[i]);
+              if(steps >= this.goals.steps[i]) {
+                  console.log("green");
+                  this.setDayColor(green, i);
+              }else if (steps >= ((this.goals.steps[i] * .5))) {
+                  console.log("yellow");
+                  this.setDayColor(yellow, i);
+              } else {
+                  console.log("red");
+                  this.setDayColor(red, i);
               }
+          }
+      },
+      setDayColor(color, day){
+          switch(day){
+              case 0:
+                  this.sunday = color;
+                  console.log(this.sunday);
+                  break;
+              case 1:
+                  this.monday = color;
+                  break;
+              case 2:
+                  this.tuesday = color;
+                  break;
+              case 3:
+                  this.wednesday = color;
+                  break;
+              case 4:
+                  this.thursday = color;
+                  break;
+              case 5:
+                  this.friday = color;
+                  break;
+              case 6:
+                  this.saturday = color;
+                  break;
           }
       }
     },
     mounted () {
+        this.changeGraphColors();
         this.render();
     },
     watch: {
         goals: {
-            handler: function (val) {
-                console.log("val",val)
-                this.color1 = 'rgba(255, 99, 132, 1)';
-                console.log(this.color1);
-                // this.$data._chart.update();
+            handler: function () {
                 this.$data._chart.destroy();
+                this.changeGraphColors();
                 this.render();
             },
             deep: true
         },
         weeklysteps: {
             handler: function() {
-                this.changeColors();
-                this.$data._chart.update();
+                this.changeGraphColors();
+                this.render();
             },
             deep: true
         }
     }
-
 });
 
 Vue.component('med-chart', {
