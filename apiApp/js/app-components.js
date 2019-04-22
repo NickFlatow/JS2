@@ -1,8 +1,5 @@
+
 Vue.component('day', {
-    //use day for calculate if badges were earned
-    //40 mins med per day = yoda
-    //activity type 97 = kettle bell
-    //activity type running name > 3 = 5k etc.
     props: {
         dayofweek: {
             type: Array,
@@ -43,6 +40,17 @@ Vue.component('day', {
 
 Vue.component('steps-chart', {
     extends: VueChartJs.Bar,
+    data: function() {
+      return {
+          sunday: 'rgba(255, 99, 132, 1)',
+          monday: 'rgba(255, 99, 132, 1)',
+          tuesday: 'rgba(255, 99, 132, 1)',
+          wednesday: 'rgba(255, 99, 132, 1)',
+          thursday: 'rgba(255, 99, 132, 1)',
+          friday: 'rgba(255, 99, 132, 1)',
+          saturday: 'rgba(255, 99, 132, 1)',
+      }
+    },
     props: {
         weeklysteps: {
             type: Array,
@@ -51,34 +59,102 @@ Vue.component('steps-chart', {
         goals: {
             type: Object,
             required: true
-        }
+        },
+    },
+    methods: {
+      render(){
+          this.renderChart({
+                  labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                  datasets: [
+                      {
+                          type: 'line',
+                          fill: false,
+                          borderColor: '#4BF832',
+                          borderDash: [5,5],
+                          label:'Goal',
+                          backgroundColor: '#0d17f8',
+                          data: this.goals.steps,
+                      },
+                      {
+                          type: 'bar',
+                          label: 'Steps',
+                          // backgroundColor: '#3985C3',
+                          data: this.weeklysteps,
+                          backgroundColor: [
+                              this.sunday,
+                              this.monday,
+                              this.tuesday,
+                              this.wednesday,
+                              this.thursday,
+                              this.friday,
+                              this.saturday,
+                          ]
+                      }
+
+                  ],
+
+
+              },
+              //options
+              {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                      yAxes: [{
+                          display: true,
+                          scaleLabel: {
+                              display: true,
+                              labelString: 'Steps'
+                          },
+                          ticks: {
+                              beginAtZero: true
+                          }
+                      }]
+                  },
+                  tooltips: {
+                      mode: 'index'
+                  },
+                  spanGaps: true
+              }
+              //this.renderChart
+          )
+      },
+      changeColors(){
+          for(let i = 0; i < 7;i++){
+              let steps = this.weeklysteps[i];
+
+              switch (steps){
+                  case steps >= this.goals.steps[0]:
+                      //get day of week method
+                      break;
+
+
+              }
+          }
+      }
     },
     mounted () {
-        this.renderChart({
-            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            datasets: [
-                {
-                    label: 'Steps',
-                    backgroundColor: '#3985C3',
-                    data: this.weeklysteps
-                    // data: this.$parent.getWeeklySteps()
-                },
-                {
-                    label:'Goal',
-                    backgroundColor: '#0d17f8',
-                    data: this.goals.steps
-                }
-
-            ]
-        }, {responsive: true, maintainAspectRatio: false})
+        this.render();
     },
     watch: {
         goals: {
-            handler: function (val, oldVal) {
-                this.$data._chart.update();
+            handler: function (val) {
+                console.log("val",val)
+                this.color1 = 'rgba(255, 99, 132, 1)';
+                console.log(this.color1);
+                // this.$data._chart.update();
+                this.$data._chart.destroy();
+                this.render();
             },
             deep: true
         },
+        weeklysteps: {
+            handler: function() {
+                this.changeColors();
+                this.$data._chart.update();
+            },
+            deep: true
+        }
     }
 
 });
@@ -94,10 +170,9 @@ Vue.component('med-chart', {
         goals:{
             type : Object,
             required:true
-        },
+        }
     },
     mounted () {
-        console.log('mounted')
         this.renderChart({
             labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             datasets: [
@@ -106,8 +181,11 @@ Vue.component('med-chart', {
                     backgroundColor: '#e7823e',
                     data: this.weeklymed
                     // data: this.$parent.getWeeklyMedMins()
+
                 },
                 {
+                    // type: 'line',
+                    // steppedLine: 'beginning',
                     label:'Goal',
                     backgroundColor: '#0d17f8',
                     data: this.goals.meditations
@@ -116,7 +194,6 @@ Vue.component('med-chart', {
             ]
         }, {responsive: true, maintainAspectRatio: false})
     },
-
     watch: {
         goals: {
             handler: function (val, oldVal) {
@@ -125,7 +202,6 @@ Vue.component('med-chart', {
             deep: true
         },
     }
-
 });
 
 Vue.component('goals-modal',{
@@ -143,7 +219,7 @@ Vue.component('goals-modal',{
         '                <!-- Modal Component -->' +
             '<b-modal id="modal" title="Set Your Daily Goals">\n' +
                 '<div class= "parent">'+
-                    '<div class = "steps">'+
+                    '<div class = "steps stepsbg">'+
                     '        <h5><b>Steps</b></h5>'+
                     '        Sunday:<input type="text" v-model="goals.steps[0]">\n' +
                     '        Monday:<input type="text" v-model="goals.steps[1]">\n' +
@@ -153,7 +229,7 @@ Vue.component('goals-modal',{
                     '        Friday:<input type="text" v-model="goals.steps[5]">\n' +
                     '        Saturday:<input type="text" v-model="goals.steps[6]">\n' +
                     '</div>'+
-                    '<div class ="med">'+
+                    '<div class ="med medbg">'+
                     '         <h5><b>Meditation minutes</b></h5>          '+
                     '         Sunday:<input type="text" v-model="goals.meditations[0]">\n' +
                     '         Monday:<input type="text" v-model="goals.meditations[1]">\n' +
@@ -168,6 +244,79 @@ Vue.component('goals-modal',{
         '</div>',
     computed: {
 
+    }
+
+});
+
+Vue.component('day',{
+    extends: VueChartJs.Doughnut,
+    data: function() {
+       return {
+          todaysGoal: this.goals.steps[0],
+          color1: 'rgba(255, 99, 132, 1)'
+       }
+    },
+    props: {
+        weeklysteps:{
+            type :Array,
+            required:true
+        },
+        goals:{
+            type : Object,
+            required:true
+        },
+    },
+    methods: {
+      render(){
+          this.renderChart({
+                  labels: ['Steps','Goals'],
+                  datasets: [
+                      {
+                          label: 'Steps',
+                          // backgroundColor: '#3985C3',
+                          // borderColor: '#4BF832',
+                          data: [this.weeklysteps[0],this.todaysGoal],
+                          backgroundColor: [
+                              this.color1,
+                              'rgba(54, 162, 235, 1)',
+                          ]
+                      }
+                  ],
+              },
+              //options
+              {responsive: true, maintainAspectRatio: false }
+              //this.renderChart
+          )
+      }
+    },
+    mounted () {
+       this.render();
+    },
+    watch: {
+        goals: {
+            handler: function () {
+
+                if(this.todaysGoal - this.weeklysteps[0] < 0) {
+                    this.todaysGoal = 0;
+                    this.color1 = 'rgba(63, 195, 128, 1)';
+                }else{
+                    this.todaysGoal -= this.weeklysteps[0];
+                }
+                console.log(this.todaysGoal);
+                // this.$data._chart.update();
+                this.$data._chart.destroy();
+                this.render();
+            },
+            deep: true
+        },
+        weeklysteps: {
+            handler: function() {
+
+                this.$data._chart.update();
+                // console.log(this.weeklysteps[0]);
+            },
+            deep:true
+        }
     }
 
 });

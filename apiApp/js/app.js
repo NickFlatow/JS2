@@ -1,16 +1,25 @@
 
 var app = new Vue({
-    // el: the DOM element to be replaced with a Vue instance
     el: '#app',
 
     data: {
         weeklySession: null,
         stepsBucket: null,
         loggedIn: false,
-        goals: {steps: [5000,5000,5000,5000,5000,5000,5000,5000], meditations: [40,40,40,40,40,40,40,0]}
+        goals: {steps: [5000,5000,5000,5000,5000,5000,5000,5000], meditations: [40,40,40,40,40,40,40]},
+        weekCounter: 0,
+        millisPerWeek: 604800000,
+        weeklySteps:[]
     },
 
     methods:{
+
+        prevWeek(){
+            this.weekCounter +=1;
+        },
+        nextWeek(){
+            this.weekCounter -=1;
+        },
         login(){
             gapi.load('client:auth2', app.authClient);
         },
@@ -44,13 +53,9 @@ var app = new Vue({
         toggle(){
           this.loggedIn = !this.loggedIn
         },
+        //get session data from google api with get request
         getData(){
-            // var authCode = app.authCode;
             var authCode = 'Bearer ' + localStorage.getItem('token');
-            // console.log(authCode);
-            // console.log(accessToken);
-            // var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataSources";
-            //get today's date
 
             //get the first day of the current week
             var sunday = new Date(this.getDayOfWeek(0));
@@ -69,7 +74,6 @@ var app = new Vue({
                 })
                 .catch((error) => {
                     console.log('token error ' + error);
-                    //refresh token
                 });
         },
         getStepsBucket(){
@@ -79,10 +83,13 @@ var app = new Vue({
             var req_url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
 
             //get first day of the current week
-            let sunday = new Date(this.getDayOfWeek(0));
+            // console.log('weekCounter ' + this.weekCounter);
+            let sunday = new Date(this.getDayOfWeek(0) - (this.millisPerWeek * this.weekCounter));
+            // console.log(sunday);
 
             //get last day of the current week
-            let saturday = new Date(this.getDayOfWeek(6));
+            let saturday = new Date(this.getDayOfWeek(6) - (this.millisPerWeek * this.weekCounter));
+            // - (604800000 *this.weekCounter)
             $.ajax({
                 type: "POST",
                 url: req_url,
@@ -105,7 +112,10 @@ var app = new Vue({
                 },
                 success: function (response) {
                     app.stepsBucket = new Session(response.bucket);
-                    app.loggedIn = true
+                    app.loggedIn = true;
+                    app.getWeeklySteps();
+                    // console.log('stepsBucket');
+                    // console.log(this.stepsBucket);
                 },
                 failure: function(errMsg) {
                     //get new access token
@@ -119,7 +129,7 @@ var app = new Vue({
             var date = new Date();
             var today = date.getDay();
             var dayOfWeek;
-            //if the day is Saturday
+
             if (date.getDay == day){
                 dayOfWeek = new Date().setDate(date.getDate());
             }
@@ -141,6 +151,7 @@ var app = new Vue({
                 return item.endTimeMillis < endOfDay && item.startTimeMillis > startOfDay;
             });
         },
+        //returns all the activities(at) for a given day(day) that are stored in weeklySession
         getDailyActivity(day,at){
             //get day of the week
             let theDay = new Date(this.getDayOfWeek(day));
@@ -155,21 +166,23 @@ var app = new Vue({
             });
         },
         getBucket(day){
-            // console.log("day: " + day);
-            // console.log(this.stepsBucket[day]);
+            //if we have no steps for that day then return zero
             if (this.stepsBucket[day].dataset[0].point[0] === undefined){
                 return 0;
+            //else return the number of steps for that day;
             }else{
                 return this.stepsBucket[day].dataset[0].point[0].value[0].intVal;
             }
         },
         getWeeklySteps(){
-           var weeklySteps =  [];
+           // var weeklySteps =  [];
 
            for(let i = 0;i <= 6; i++){
-               weeklySteps.push(this.getBucket(i));
+               // this.weeklySteps[i] = this.getBucket(i);
+               this.$set(this.weeklySteps, i, this.getBucket(i));
            }
-           return weeklySteps;
+           this.weeklySteps.updated = new Date();
+           return this.weeklySteps;
         },
         isloggedIn(){
             if (localStorage.getItem("token") === null) {
@@ -180,12 +193,13 @@ var app = new Vue({
         },
         getWeeklyMedMins(){
 
-            var medMins = [];
-            var blarg = [];
+            var dailyMedMins = [];
+            var weeklyMedMins = [];
 
-            for (let i = 0;i <= 6;i++){
-                medMins.push(this.getDailyActivity(i,45));
-                blarg.push(medMins[i].reduce((mins, {endTimeMillis, startTimeMillis}) => {
+            for (let day = 0;day <= 6;day++){
+                dailyMedMins.push(this.getDailyActivity(day,45));
+
+                weeklyMedMins.push(dailyMedMins[day].reduce((mins, {endTimeMillis, startTimeMillis}) => {
                         mins += Number(endTimeMillis / 60000).toFixed() - Number(startTimeMillis / 60000).toFixed();
                     return mins
                 }, 0));
@@ -193,7 +207,7 @@ var app = new Vue({
             //
             // console.log(blarg);
             // console.log(medMins);
-            return blarg;
+            return weeklyMedMins;
         },
     },
     computed: {
@@ -239,11 +253,10 @@ var app = new Vue({
         saturdaySteps: function(){
             return this.getBucket(6);
         },
-        weeklySteps: function() {
-            return this.getWeeklySteps();
-        },
+        // weeklySteps: function() {
+        //     return this.getWeeklySteps();
+        // },
         weeklyMed: function(){
-            console.log("jello");
             return this.getWeeklyMedMins();
         }
     },
@@ -254,9 +267,12 @@ var app = new Vue({
         }else{
             console.log('logged out');
         }
-    //    set time out for five mins call load google
+    // set time out for five mins call load google
     },
     watch:{
-
+        weekCounter: function(){
+            this.getStepsBucket();
+            console.log(this.stepsBucket);
+        }
     }
 });

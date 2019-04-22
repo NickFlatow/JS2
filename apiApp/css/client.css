@@ -30,24 +30,25 @@ input{
     width: 233px;
 }
 
-/*parent steps and med are for the modal window */
+/*parent, steps and med are for the gaols-modal window */
 .parent {
     display: flex;
 }
 .steps {
     width: 50%;
+}
+.stepsbg{
     background: #3985C3;
 }
 .med {
     /* Grow to rest of parent */
     flex: 1;
+}
+.medbg{
     background: #E7823E;
 }
 body{
     font-family: Typewolf;
-}
-.modal-backdrop {
-    background-color: blue;
 }
 .alert{
     text-align:center;
