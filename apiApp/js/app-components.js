@@ -93,7 +93,6 @@ Vue.component('steps-chart', {
 
                   ],
 
-
               },
               //options
               {
@@ -119,22 +118,19 @@ Vue.component('steps-chart', {
           //this.renderChart
           )
       },
-      changeGraphColors(){
-          console.log("changeGraphColors");
+      changeGraphColors(activityType,goalType){
           for(let i = 0; i < 7;i++){
-              let steps = this.weeklysteps[i];
+              let activity = activityType[i];
+              let goals = goalType[i];
               let green = 'rgba(30, 130, 76, 1)';
               let yellow = 'rgba(245, 229, 27, 1)';
               let red = 'rgba(207, 0, 15, 1)';
-              console.log(steps, this.goals.steps[i]);
-              if(steps >= this.goals.steps[i]) {
-                  console.log("green");
+
+              if(activity >= goals) {
                   this.setDayColor(green, i);
-              }else if (steps >= ((this.goals.steps[i] * .5))) {
-                  console.log("yellow");
+              }else if (activity >= ((goals * .5))) {
                   this.setDayColor(yellow, i);
               } else {
-                  console.log("red");
                   this.setDayColor(red, i);
               }
           }
@@ -143,7 +139,6 @@ Vue.component('steps-chart', {
           switch(day){
               case 0:
                   this.sunday = color;
-                  console.log(this.sunday);
                   break;
               case 1:
                   this.monday = color;
@@ -167,21 +162,21 @@ Vue.component('steps-chart', {
       }
     },
     mounted () {
-        this.changeGraphColors();
+        this.changeGraphColors(this.weeklysteps,this.goals.steps);
         this.render();
     },
     watch: {
         goals: {
             handler: function () {
                 this.$data._chart.destroy();
-                this.changeGraphColors();
+                this.changeGraphColors(this.weeklysteps,this.goals.steps);
                 this.render();
             },
             deep: true
         },
         weeklysteps: {
             handler: function() {
-                this.changeGraphColors();
+                this.changeGraphColors(this.weeklysteps,this.goals.steps);
                 this.render();
             },
             deep: true
